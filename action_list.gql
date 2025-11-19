@@ -153,3 +153,110 @@ onCreateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
 onUpdateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
 onDeleteActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
 
+    /*============================================================
+Input Types
+============================================================*/
+
+input CreateActionInput {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Delegate: Boolean
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	FileUrls: [String]
+	Ignore: Boolean
+	KBLink: [String]
+	Notes: [String]
+	Notify: String
+	Owner: String
+	Type: String
+	_version: Int
+	actionlistID: ID!
+	id: ID
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	prompt: String
+	tags: [String]
+	userLike: Int
+	orderRank: Int
+}
+
+input UpdateActionInput {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Delegate: Boolean
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	Ignore: Boolean
+	FileUrls: [String]
+	KBLink: [String]
+	Notes: [String]
+	Notify: String
+	Owner: String
+	Type: String
+	_version: Int
+	actionlistID: ID
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	prompt: String
+	tags: [String]
+	userLike: Int
+	orderRank: Int
+}
+
+input DeleteActionInput {
+	# 	_version: Int
+	id: ID!
+}
+
+input CreateActionListInput {
+	Context: String
+	Delegate: Boolean
+	DueDate: AWSDateTime
+	Ignore: Boolean
+	Tags: [String]
+	_version: Int
+	action: String
+	actionListStatus: Status
+	actionboardID: ID
+	id: ID
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	notes: String
+	savedBy: String
+	orderRank: Int
+}
+
+input UpdateActionListInput {
+	Context: String
+	Delegate: Boolean
+	DueDate: AWSDateTime
+	Ignore: Boolean
+	Tags: [String]
+	_version: Int
+	action: String
+	actionListStatus: Status
+	actionboardID: ID
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	notes: String
+	savedBy: String
+	orderRank: Int
+}
+
+input DeleteActionListInput {
+	# 	_version: Int
+	id: ID!
+}

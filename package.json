@@ -1,0 +1,32 @@
+{
+  "name": "actiionlist-api",
+  "version": "1.0.0",
+  "description": "Notification API with GraphQL and AWS Lambda (TypeScript)",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "prebuild": "npm run clean",
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "lint": "tsc --noEmit",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "package": "npm run build && zip -r lambda-deployment.zip dist/ node_modules/ package.json",
+    "package:win": "npm run build && powershell -NoProfile -NonInteractive -ExecutionPolicy Bypass -Command \"Compress-Archive -Path dist,node_modules,package.json -DestinationPath lambda-deployment.zip -Force\""
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.917.0",
+    "@aws-sdk/lib-dynamodb": "^3.917.0",
+    "aws-lambda": "^1.0.7",
+    "dotenv": "^17.2.3",
+    "uuid": "^13.0.0",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.156",
+    "@types/node": "^24.9.2",
+    "@types/uuid": "^11.0.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
+  }
+}

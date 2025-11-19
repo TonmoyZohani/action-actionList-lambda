@@ -1,0 +1,4294 @@
+enum Access {
+	Board_Members
+	Private
+	Public
+}
+
+type Action @aws_api_key
+@aws_iam {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Conversations(
+		filter: ModelConversationFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelConversationConnection
+	Delegate: Boolean
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	Ignore: Boolean
+	FileUrls: [String]
+	KBLink: [String]
+	Notes: [String]
+	Notify: String
+	orderRank: Int
+	Owner: String
+	Type: String
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp
+	_version: Int
+	actionlistID: ID!
+	createdAt: AWSDateTime!
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	prompt: String
+	tags: [String]
+	updatedAt: AWSDateTime!
+	userLike: Int
+	assignedUserInfo: ActionListTransferUserInfo
+	assignedByUserInfo: ActionListTransferUserInfo
+}
+
+type ActionAssist @aws_api_key
+@aws_iam {
+	ActionStatus: Status
+	Complexity: String
+	Conversations(
+		filter: ModelConversationFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelConversationConnection
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	EstimatedTime: String
+	GuardRails: AWSJSON
+	History: AWSJSON
+	KBLink: [String]
+	Notes: String
+	Notify: String
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	actionItem: String
+	actionboardID: ID
+	createdAt: AWSDateTime!
+	dependencies: [String]
+	description: String
+	id: ID!
+	knowledgeBaseID: ID
+	priority: String
+	tags: [String]
+	tools: [String]
+	updatedAt: AWSDateTime!
+	userLike: Int
+}
+
+union ActionBoard = CommunityBoard | PremiumBoard | SponsoredBoard 
+
+type ActionGoal @aws_api_key
+@aws_iam {
+	id: ID!
+	title: String!
+	priority: String!
+	boardID: ID
+	roleId: ID
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+type ActionList @aws_api_key
+@aws_iam {
+	Context: String
+	Delegate: Boolean
+	DueDate: AWSDateTime
+	Ignore: Boolean
+	Tags: [String]
+	orderRank: Int
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp
+	_version: Int
+	action: String
+	actionItems(
+		filter: ModelActionFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionConnection
+	actionListStatus: Status
+	actionboardID: ID
+	createdAt: AWSDateTime!
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	notes: String
+	savedBy: String
+	updatedAt: AWSDateTime!
+	metadata: ActionListMetaData
+	transferInfo: TransferInfo
+	assignedUserInfo: ActionListTransferUserInfo
+	assignedByUserInfo: ActionListTransferUserInfo
+}
+
+type ActionListMetaData {
+	mainBoardId: ID
+	newBoardId: ID
+}
+
+enum ActionListOrItemType {
+	ACTION_LIST
+	ACTION_ITEM
+}
+
+type ActionListResponse {
+	success: Boolean!
+	message: String
+	data: [ActionList]
+}
+
+input ActionListTransferAcceptRejectInput {
+	actionListId: ID!
+	userId: ID!
+}
+
+input ActionListTransferInput {
+	actionListId: ID!
+	userId: ID!
+	newBoardId: ID!
+}
+
+type ActionListTransferUserInfo {
+	id: ID!
+	name: String
+	email: String!
+	avatar: String
+}
+
+enum ActivityType {
+	CreateActionList
+	UpdateActionList
+	DeleteActionList
+	Conversation
+	AutoActionExecution
+	Login
+	Logout
+}
+
+input AssignUserInActionListOrItemInput {
+	actionLisOrItemId: ID!
+	assignedUserId: ID!
+	assignedByUserId: ID!
+	type: ActionListOrItemType!
+}
+
+type AutoAction @aws_api_key
+@aws_iam {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Conversations(
+		filter: ModelConversationFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelConversationConnection
+	Delegate: Boolean
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	Ignore: Boolean
+	KBLink: String
+	Notes: String
+	Notify: String
+	Owner: String
+	Type: String
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	actionboardID: ID
+	createdAt: AWSDateTime!
+	due_date: AWSDateTime
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	permissions: [String]
+	prompt: String
+	tags: [String]
+	updatedAt: AWSDateTime!
+	userLike: Int
+}
+
+type AutoActionPrompt @aws_api_key
+@aws_iam {
+	id: ID!
+	name: String!
+	description: String
+	template: String
+	steps: [String]
+	script: String
+	actionboardID: ID!
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+	_version: Int!
+	_lastChangedAt: AWSTimestamp!
+	_deleted: Boolean
+}
+
+interface BaseMembership {
+	id: ID!
+	joinDate: AWSDateTime
+	lastActiveDate: AWSDateTime
+	settings: AWSJSON
+	status: MembershipStatus
+}
+
+interface Board {
+	active: Boolean
+	aiModel: String
+	budget: Float
+	description: String
+	details: AWSJSON
+	id: ID!
+	link: String
+	name: String!
+	public: Boolean
+	usersCount: Int!
+}
+
+type BoardRoleDefinition @aws_api_key
+@aws_iam {
+	id: ID!
+	boardID: ID
+	name: String!
+	description: String
+	prompt: String
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+type BoardUserActivity @aws_api_key
+@aws_iam {
+	id: ID!
+	userID: ID!
+	boardID: ID!
+	activityType: ActivityType!
+	activityDetail: AWSJSON
+	resourceID: ID
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+	_version: Int!
+	_lastChangedAt: AWSDateTime!
+	_deleted: Boolean
+}
+
+type BoardUserActivityConnection @aws_api_key
+@aws_iam {
+	items: [BoardUserActivity]
+	nextToken: String
+}
+
+type CommunityBoard implements Board @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	actionLists(
+		filter: ModelActionListFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+	active: Boolean
+	aiModel: String
+	autoactions(
+		filter: ModelAutoActionFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelAutoActionConnection
+	budget: Float
+	createdAt: AWSDateTime!
+	description: String
+	details: AWSJSON
+	id: ID!
+	issues(
+		filter: ModelIssuesFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelIssuesConnection
+	knowledgeBases(
+		filter: ModelKnowledgeBaseFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelKnowledgeBaseConnection
+	likes: Int
+	link: String
+	memberships(
+		filter: ModelCommunityBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelCommunityBoardMembershipConnection
+	name: String!
+	owner: ID
+	price: Float
+	public: Boolean
+	reviews(
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelReviewConnection
+	updatedAt: AWSDateTime!
+	usersCount: Int!
+	userID: ID!
+}
+
+type CommunityBoardMembership implements BaseMembership @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	board: CommunityBoard!
+	boardID: ID!
+	createdAt: AWSDateTime!
+	id: ID!
+	joinDate: AWSDateTime!
+	lastActiveDate: AWSDateTime
+	role: Role!
+	settings: AWSJSON
+	status: MembershipStatus!
+	updatedAt: AWSDateTime!
+	user: User!
+	userID: ID!
+}
+
+type Conversation @aws_api_key
+@aws_iam {
+	DateTime: AWSDateTime
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	actionID: ID
+	actionboardID: ID!
+	createdAt: AWSDateTime!
+	encrypt: Boolean
+	id: ID!
+	msg(
+		filter: ModelMessageFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelMessageConnection
+	updatedAt: AWSDateTime!
+}
+
+input CreateActionAssistInput {
+	ActionStatus: Status
+	Complexity: String
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	EstimatedTime: String
+	GuardRails: AWSJSON
+	History: AWSJSON
+	KBLink: [String]
+	Notes: String
+	Notify: String
+	_version: Int
+	actionItem: String
+	actionboardID: ID
+	dependencies: [String]
+	description: String
+	id: ID
+	knowledgeBaseID: ID
+	priority: String
+	tags: [String]
+	tools: [String]
+	userLike: Int
+}
+
+input CreateActionGoalInput {
+	title: String!
+	priority: String!
+	boardID: ID
+	roleId: ID
+}
+
+input CreateActionInput {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Delegate: Boolean
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	FileUrls: [String]
+	Ignore: Boolean
+	KBLink: [String]
+	Notes: [String]
+	Notify: String
+	Owner: String
+	Type: String
+	_version: Int
+	actionlistID: ID!
+	id: ID
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	prompt: String
+	tags: [String]
+	userLike: Int
+	orderRank: Int
+}
+
+input CreateActionListInput {
+	Context: String
+	Delegate: Boolean
+	DueDate: AWSDateTime
+	Ignore: Boolean
+	Tags: [String]
+	_version: Int
+	action: String
+	actionListStatus: Status
+	actionboardID: ID
+	id: ID
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	notes: String
+	savedBy: String
+	orderRank: Int
+}
+
+input CreateAutoActionInput {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Delegate: Boolean
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	FileUrls: [String]
+	Ignore: Boolean
+	KBLink: String
+	Notes: [String]
+	Notify: String
+	Owner: String
+	Type: String
+	_version: Int
+	actionboardID: ID
+	due_date: AWSDateTime
+	id: ID
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	permissions: [String]
+	prompt: String
+	tags: [String]
+	userLike: Int
+}
+
+input CreateAutoActionPromptInput {
+	id: ID
+	name: String!
+	description: String
+	template: String
+	steps: [String]
+	script: String
+	actionboardID: ID!
+	_version: Int
+}
+
+input CreateAvailableRoleInput {
+	name: String!
+	description: String
+	prompt: String
+	boardID: ID
+	isDefault: Boolean
+}
+
+input CreateBoardRoleDefinitionInput {
+	boardID: ID
+	name: String!
+	description: String
+	prompt: String
+}
+
+input CreateBoardUserActivityInput {
+	userID: ID!
+	boardID: ID!
+	activityType: ActivityType!
+	activityDetail: AWSJSON
+	resourceID: ID
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+	_version: Int!
+	_lastChangedAt: AWSDateTime!
+	_deleted: Boolean
+}
+
+input CreateCommunityBoardInput {
+	_version: Int
+	active: Boolean
+	aiModel: String
+	budget: Float
+	description: String
+	details: AWSJSON
+	id: ID
+	likes: Int
+	link: String
+	name: String!
+	owner: ID
+	price: Float
+	public: Boolean
+	usersCount: Int!
+}
+
+input CreateCommunityBoardMembershipInput {
+	_version: Int
+	boardID: ID!
+	id: ID
+	joinDate: AWSDateTime!
+	lastActiveDate: AWSDateTime
+	role: Role!
+	settings: AWSJSON
+	status: MembershipStatus!
+	userID: ID!
+}
+
+input CreateConversationInput {
+	DateTime: AWSDateTime
+	_version: Int
+	actionID: ID
+	actionboardID: ID!
+	encrypt: Boolean
+	id: ID
+}
+
+input CreateIssuesInput {
+	_version: Int
+	actionboardID: ID
+	date: AWSDateTime
+	details: String
+	id: ID
+	name: String
+	userContactEmail: AWSEmail
+	userID: ID!
+}
+
+input CreateKnowledgeBaseInput {
+	BackupUrl: String
+	S3Url: [String]
+	_version: Int
+	access: Access
+	actionBoardID: ID
+	comments: AWSJSON
+	context: String
+	downlaods: Int
+	encrypt: String
+	id: ID
+	liked: Int
+	marketplace: Boolean
+	name: String
+	tags: [String]
+	text: String
+	validated: Boolean
+}
+
+input CreateMessageInput {
+	_version: Int
+	content: String
+	conversationID: ID!
+	id: ID
+	role: String
+	timeStamp: AWSDateTime
+}
+
+input CreateOrgInput {
+	_version: Int
+	createdAt: AWSDateTime
+	id: ID
+	orgBillingAddress: String
+	orgContacts: [OrgContactInput]
+	orgIndustry: String
+	orgName: String
+	orgOrgAdminId: ID!
+	orgWebsite: String
+	tenantId: String
+	updatedAt: AWSDateTime
+	verified: Boolean
+}
+
+input CreatePostInput {
+	title: String!
+	content: String!
+	boardID: ID!
+	userID: ID!
+}
+
+input CreatePremiumBoardInput {
+	_version: Int
+	active: Boolean
+	aiModel: String
+	budget: Float
+	description: String
+	details: AWSJSON
+	goal: String
+	id: ID
+	link: String
+	name: String!
+	owner: ID
+	public: Boolean
+	usersCount: Int!
+}
+
+input CreatePremiumBoardMembershipInput {
+	_version: Int
+	boardID: ID!
+	id: ID
+	joinDate: AWSDateTime!
+	lastActiveDate: AWSDateTime
+	role: Role!
+	settings: AWSJSON
+	status: MembershipStatus!
+	userID: ID!
+}
+
+input CreatePromptInput {
+	_version: Int
+	content: String
+	id: ID
+	name: String
+	tags: [String]
+	values: AWSJSON
+}
+
+input CreateReviewInput {
+	_version: Int
+	boardID: ID!
+	comment: String
+	id: ID
+	likes: Int
+	parentReviewID: ID
+	rating: Int!
+	userName: String!
+}
+
+input CreateSponsoredBoardInput {
+	_version: Int
+	active: Boolean
+	aiModel: String
+	budget: Float
+	description: String
+	details: AWSJSON
+	goal: String
+	id: ID
+	link: String
+	name: String!
+	owner: ID
+	public: Boolean
+	usersCount: Int!
+}
+
+input CreateSponsoredBoardMembershipInput {
+	_version: Int
+	boardID: ID!
+	id: ID
+	joinDate: AWSDateTime!
+	lastActiveDate: AWSDateTime
+	role: Role!
+	settings: AWSJSON
+	status: MembershipStatus!
+	userID: ID!
+}
+
+input CreateUserGuideInput {
+	_version: Int
+	details: String!
+	id: ID
+	updateDate: AWSDateTime
+}
+
+input CreateUserInput {
+	Active: Boolean
+	_version: Int
+	cognitoID: String
+	email: AWSEmail!
+	firstName: String
+	id: ID
+	lastName: String
+	orgID: ID
+	role: String
+	s3link: String
+	securityStoreID: String
+	startDate: AWSDateTime
+	stripeCustomerID: String
+	userName: String
+}
+
+input DeleteActionAssistInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteActionGoalInput {
+	id: ID!
+}
+
+input DeleteActionInput {
+	# 	_version: Int
+	id: ID!
+}
+
+input DeleteActionListInput {
+	# 	_version: Int
+	id: ID!
+}
+
+input DeleteAutoActionInput {
+	# 	_version: Int
+	id: ID!
+}
+
+input DeleteAutoActionPromptInput {
+	id: ID!
+	_version: Int
+}
+
+input DeleteAvailableRoleInput {
+	id: ID!
+}
+
+input DeleteBoardRoleDefinitionInput {
+	id: ID!
+}
+
+input DeleteBoardUserActivityInput {
+	id: ID!
+}
+
+input DeleteCommunityBoardInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteCommunityBoardMembershipInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteConversationInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteIssuesInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteKnowledgeBaseInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteMessageInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteOrgInput {
+	_version: Int
+	id: ID!
+}
+
+input DeletePremiumBoardInput {
+	_version: Int
+	id: ID!
+}
+
+input DeletePremiumBoardMembershipInput {
+	_version: Int
+	id: ID!
+}
+
+input DeletePromptInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteReviewInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteSponsoredBoardInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteSponsoredBoardMembershipInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteUserGuideInput {
+	_version: Int
+	id: ID!
+}
+
+input DeleteUserInput {
+	_version: Int
+	id: ID!
+}
+
+type DemoPost {
+	id: ID!
+	title: String!
+	content: String!
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+type Issues @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	actionboardID: ID
+	createdAt: AWSDateTime!
+	date: AWSDateTime
+	details: String
+	id: ID!
+	name: String
+	updatedAt: AWSDateTime!
+	userContactEmail: AWSEmail
+	userID: ID!
+}
+
+type KnowledgeBase @aws_api_key
+@aws_iam {
+	ActionLists(
+		filter: ModelActionListFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+	BackupUrl: String
+	S3Url: [String]
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	access: Access
+	actionBoardID: ID
+	comments: AWSJSON
+	context: String
+	createdAt: AWSDateTime!
+	downlaods: Int
+	encrypt: String
+	id: ID!
+	liked: Int
+	marketplace: Boolean
+	name: String
+	tags: [String]
+	text: String
+	updatedAt: AWSDateTime!
+	validated: Boolean
+}
+
+enum MembershipStatus {
+	Active
+	Canceled
+	Expired
+	Pending
+}
+
+type Message @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	content: String
+	conversationID: ID!
+	createdAt: AWSDateTime!
+	id: ID!
+	role: String
+	timeStamp: AWSDateTime
+	updatedAt: AWSDateTime!
+}
+
+input ModelAccessInput {
+	eq: Access
+	ne: Access
+}
+
+input ModelActionAssistConditionInput {
+	ActionStatus: ModelStatusInput
+	Complexity: ModelStringInput
+	Due_date: ModelStringInput
+	Encrypt: ModelBooleanInput
+	EstimatedTime: ModelStringInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	KBLink: ModelStringInput
+	Notes: ModelStringInput
+	Notify: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionItem: ModelStringInput
+	actionboardID: ModelIDInput
+	and: [ModelActionAssistConditionInput]
+	createdAt: ModelStringInput
+	dependencies: ModelStringInput
+	description: ModelStringInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelActionAssistConditionInput
+	or: [ModelActionAssistConditionInput]
+	priority: ModelStringInput
+	tags: ModelStringInput
+	tools: ModelStringInput
+	updatedAt: ModelStringInput
+	userLike: ModelIntInput
+}
+
+type ModelActionAssistConnection @aws_api_key
+@aws_iam {
+	items: [ActionAssist]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelActionAssistFilterInput {
+	ActionStatus: ModelStatusInput
+	Complexity: ModelStringInput
+	Due_date: ModelStringInput
+	Encrypt: ModelBooleanInput
+	EstimatedTime: ModelStringInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	KBLink: ModelStringInput
+	Notes: ModelStringInput
+	Notify: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionItem: ModelStringInput
+	actionboardID: ModelIDInput
+	and: [ModelActionAssistFilterInput]
+	createdAt: ModelStringInput
+	dependencies: ModelStringInput
+	description: ModelStringInput
+	id: ModelIDInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelActionAssistFilterInput
+	or: [ModelActionAssistFilterInput]
+	priority: ModelStringInput
+	tags: ModelStringInput
+	tools: ModelStringInput
+	updatedAt: ModelStringInput
+	userLike: ModelIntInput
+}
+
+input ModelActionConditionInput {
+	Accepted: ModelBooleanInput
+	ActionItem: ModelStringInput
+	ActionStatus: ModelStatusInput
+	Delegate: ModelBooleanInput
+	Due_date: ModelStringInput
+	Encrypt: ModelBooleanInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	Ignore: ModelBooleanInput
+	KBLink: ModelStringInput
+	Notes: ModelStringInput
+	Notify: ModelStringInput
+	Owner: ModelStringInput
+	Type: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionlistID: ModelIDInput
+	and: [ModelActionConditionInput]
+	createdAt: ModelStringInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelActionConditionInput
+	or: [ModelActionConditionInput]
+	prompt: ModelStringInput
+	tags: ModelStringInput
+	updatedAt: ModelStringInput
+	userLike: ModelIntInput
+}
+
+type ModelActionConnection @aws_api_key
+@aws_iam {
+	items: [Action]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelActionFilterInput {
+	Accepted: ModelBooleanInput
+	ActionItem: ModelStringInput
+	ActionStatus: ModelStatusInput
+	Delegate: ModelBooleanInput
+	Due_date: ModelStringInput
+	Encrypt: ModelBooleanInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	Ignore: ModelBooleanInput
+	KBLink: ModelStringInput
+	Notes: ModelStringInput
+	Notify: ModelStringInput
+	Owner: ModelStringInput
+	Type: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionlistID: ModelIDInput
+	and: [ModelActionFilterInput]
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelActionFilterInput
+	or: [ModelActionFilterInput]
+	prompt: ModelStringInput
+	tags: ModelStringInput
+	updatedAt: ModelStringInput
+	userLike: ModelIntInput
+}
+
+type ModelActionGoalConnection @aws_api_key
+@aws_iam {
+	items: [ActionGoal]!
+	nextToken: String
+}
+
+input ModelActionGoalFilterInput {
+	id: ModelIDInput
+	title: ModelStringInput
+	priority: ModelStringInput
+	boardID: ModelIDInput
+	roleId: ModelIDInput
+	and: [ModelActionGoalFilterInput]
+	or: [ModelActionGoalFilterInput]
+	not: ModelActionGoalFilterInput
+}
+
+input ModelActionListConditionInput {
+	Context: ModelStringInput
+	Delegate: ModelBooleanInput
+	DueDate: ModelStringInput
+	Ignore: ModelBooleanInput
+	Tags: ModelStringInput
+	_deleted: ModelBooleanInput
+	action: ModelStringInput
+	actionListStatus: ModelStatusInput
+	actionboardID: ModelIDInput
+	and: [ModelActionListConditionInput]
+	createdAt: ModelStringInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelActionListConditionInput
+	notes: ModelStringInput
+	or: [ModelActionListConditionInput]
+	savedBy: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+type ModelActionListConnection @aws_api_key
+@aws_iam {
+	items: [ActionList]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelActionListFilterInput {
+	Context: ModelStringInput
+	Delegate: ModelBooleanInput
+	DueDate: ModelStringInput
+	Ignore: ModelBooleanInput
+	Tags: ModelStringInput
+	_deleted: ModelBooleanInput
+	action: ModelStringInput
+	actionListStatus: ModelStatusInput
+	actionboardID: ModelIDInput
+	and: [ModelActionListFilterInput]
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelActionListFilterInput
+	notes: ModelStringInput
+	or: [ModelActionListFilterInput]
+	savedBy: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+input ModelActivityTypeInput {
+	eq: ActivityType
+	ne: ActivityType
+}
+
+enum ModelAttributeTypes {
+	_null
+	binary
+	binarySet
+	bool
+	list
+	map
+	number
+	numberSet
+	string
+	stringSet
+}
+
+input ModelAutoActionConditionInput {
+	Accepted: ModelBooleanInput
+	ActionItem: ModelStringInput
+	ActionStatus: ModelStatusInput
+	Delegate: ModelBooleanInput
+	Encrypt: ModelBooleanInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	Ignore: ModelBooleanInput
+	KBLink: ModelStringInput
+	Notes: ModelStringInput
+	Notify: ModelStringInput
+	Owner: ModelStringInput
+	Type: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionboardID: ModelIDInput
+	and: [ModelAutoActionConditionInput]
+	createdAt: ModelStringInput
+	due_date: ModelStringInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelAutoActionConditionInput
+	or: [ModelAutoActionConditionInput]
+	permissions: ModelStringInput
+	prompt: ModelStringInput
+	tags: ModelStringInput
+	updatedAt: ModelStringInput
+	userLike: ModelIntInput
+}
+
+type ModelAutoActionConnection @aws_api_key
+@aws_iam {
+	items: [AutoAction]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelAutoActionFilterInput {
+	Accepted: ModelBooleanInput
+	ActionItem: ModelStringInput
+	ActionStatus: ModelStatusInput
+	Delegate: ModelBooleanInput
+	Encrypt: ModelBooleanInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	Ignore: ModelBooleanInput
+	KBLink: ModelStringInput
+	Notes: ModelStringInput
+	Notify: ModelStringInput
+	Owner: ModelStringInput
+	Type: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionboardID: ModelIDInput
+	and: [ModelAutoActionFilterInput]
+	createdAt: ModelStringInput
+	due_date: ModelStringInput
+	id: ModelIDInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	knowledgeBaseID: ModelIDInput
+	not: ModelAutoActionFilterInput
+	or: [ModelAutoActionFilterInput]
+	permissions: ModelStringInput
+	prompt: ModelStringInput
+	tags: ModelStringInput
+	updatedAt: ModelStringInput
+	userLike: ModelIntInput
+}
+
+input ModelAutoActionPromptConditionInput {
+	name: ModelStringInput
+	description: ModelStringInput
+	template: ModelStringInput
+	steps: ModelStringInput
+	script: ModelStringInput
+	actionboardID: ModelIDInput
+	and: [ModelAutoActionPromptConditionInput]
+	or: [ModelAutoActionPromptConditionInput]
+	not: ModelAutoActionPromptConditionInput
+	_deleted: ModelBooleanInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+type ModelAutoActionPromptConnection @aws_api_key
+@aws_iam {
+	items: [AutoActionPrompt]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelAutoActionPromptFilterInput {
+	id: ModelIDInput
+	name: ModelStringInput
+	description: ModelStringInput
+	template: ModelStringInput
+	steps: ModelStringInput
+	script: ModelStringInput
+	actionboardID: ModelIDInput
+	and: [ModelAutoActionPromptFilterInput]
+	or: [ModelAutoActionPromptFilterInput]
+	not: ModelAutoActionPromptFilterInput
+	_deleted: ModelBooleanInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+type ModelBoardRoleDefinitionConnection @aws_api_key
+@aws_iam {
+	items: [BoardRoleDefinition]!
+	nextToken: String
+}
+
+input ModelBoardRoleDefinitionFilterInput {
+	id: ModelIDInput
+	boardID: ModelIDInput
+	name: ModelStringInput
+	and: [ModelBoardRoleDefinitionFilterInput]
+	or: [ModelBoardRoleDefinitionFilterInput]
+	not: ModelBoardRoleDefinitionFilterInput
+}
+
+input ModelBooleanInput {
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	eq: Boolean
+	ne: Boolean
+}
+
+input ModelCommunityBoardConditionInput {
+	_deleted: ModelBooleanInput
+	active: ModelBooleanInput
+	aiModel: ModelStringInput
+	and: [ModelCommunityBoardConditionInput]
+	budget: ModelFloatInput
+	createdAt: ModelStringInput
+	description: ModelStringInput
+	details: ModelStringInput
+	likes: ModelIntInput
+	link: ModelStringInput
+	name: ModelStringInput
+	not: ModelCommunityBoardConditionInput
+	or: [ModelCommunityBoardConditionInput]
+	owner: ModelIDInput
+	price: ModelFloatInput
+	public: ModelBooleanInput
+	updatedAt: ModelStringInput
+	usersCount: ModelIntInput
+}
+
+type ModelCommunityBoardConnection @aws_api_key
+@aws_iam {
+	items: [CommunityBoard]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelCommunityBoardFilterInput {
+	_deleted: ModelBooleanInput
+	active: ModelBooleanInput
+	aiModel: ModelStringInput
+	and: [ModelCommunityBoardFilterInput]
+	budget: ModelFloatInput
+	createdAt: ModelStringInput
+	description: ModelStringInput
+	details: ModelStringInput
+	id: ModelIDInput
+	likes: ModelIntInput
+	link: ModelStringInput
+	name: ModelStringInput
+	not: ModelCommunityBoardFilterInput
+	or: [ModelCommunityBoardFilterInput]
+	owner: ModelIDInput
+	price: ModelFloatInput
+	public: ModelBooleanInput
+	updatedAt: ModelStringInput
+	usersCount: ModelIntInput
+	userID: ModelIDInput
+}
+
+input ModelCommunityBoardMembershipConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelCommunityBoardMembershipConditionInput]
+	boardID: ModelIDInput
+	createdAt: ModelStringInput
+	joinDate: ModelStringInput
+	lastActiveDate: ModelStringInput
+	not: ModelCommunityBoardMembershipConditionInput
+	or: [ModelCommunityBoardMembershipConditionInput]
+	role: ModelRoleInput
+	settings: ModelStringInput
+	status: ModelMembershipStatusInput
+	updatedAt: ModelStringInput
+	userID: ModelIDInput
+}
+
+type ModelCommunityBoardMembershipConnection @aws_api_key
+@aws_iam {
+	items: [CommunityBoardMembership]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelCommunityBoardMembershipFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelCommunityBoardMembershipFilterInput]
+	boardID: ModelIDInput
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	joinDate: ModelStringInput
+	lastActiveDate: ModelStringInput
+	not: ModelCommunityBoardMembershipFilterInput
+	or: [ModelCommunityBoardMembershipFilterInput]
+	role: ModelRoleInput
+	settings: ModelStringInput
+	status: ModelMembershipStatusInput
+	updatedAt: ModelStringInput
+	userID: ModelIDInput
+}
+
+input ModelConversationConditionInput {
+	DateTime: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionID: ModelIDInput
+	actionboardID: ModelIDInput
+	and: [ModelConversationConditionInput]
+	createdAt: ModelStringInput
+	encrypt: ModelBooleanInput
+	not: ModelConversationConditionInput
+	or: [ModelConversationConditionInput]
+	updatedAt: ModelStringInput
+}
+
+type ModelConversationConnection @aws_api_key
+@aws_iam {
+	items: [Conversation]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelConversationFilterInput {
+	DateTime: ModelStringInput
+	_deleted: ModelBooleanInput
+	actionID: ModelIDInput
+	actionboardID: ModelIDInput
+	and: [ModelConversationFilterInput]
+	createdAt: ModelStringInput
+	encrypt: ModelBooleanInput
+	id: ModelIDInput
+	not: ModelConversationFilterInput
+	or: [ModelConversationFilterInput]
+	updatedAt: ModelStringInput
+}
+
+input ModelFloatInput {
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	between: [Float]
+	eq: Float
+	ge: Float
+	gt: Float
+	le: Float
+	lt: Float
+	ne: Float
+}
+
+input ModelIDInput {
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	beginsWith: ID
+	between: [ID]
+	contains: ID
+	eq: ID
+	ge: ID
+	gt: ID
+	le: ID
+	lt: ID
+	ne: ID
+	notContains: ID
+	size: ModelSizeInput
+}
+
+input ModelIntInput {
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	between: [Int]
+	eq: Int
+	ge: Int
+	gt: Int
+	le: Int
+	lt: Int
+	ne: Int
+}
+
+input ModelIssuesConditionInput {
+	_deleted: ModelBooleanInput
+	actionboardID: ModelIDInput
+	and: [ModelIssuesConditionInput]
+	createdAt: ModelStringInput
+	date: ModelStringInput
+	details: ModelStringInput
+	name: ModelStringInput
+	not: ModelIssuesConditionInput
+	or: [ModelIssuesConditionInput]
+	updatedAt: ModelStringInput
+	userContactEmail: ModelStringInput
+	userID: ModelIDInput
+}
+
+type ModelIssuesConnection @aws_api_key
+@aws_iam {
+	items: [Issues]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelIssuesFilterInput {
+	_deleted: ModelBooleanInput
+	actionboardID: ModelIDInput
+	and: [ModelIssuesFilterInput]
+	createdAt: ModelStringInput
+	date: ModelStringInput
+	details: ModelStringInput
+	id: ModelIDInput
+	name: ModelStringInput
+	not: ModelIssuesFilterInput
+	or: [ModelIssuesFilterInput]
+	updatedAt: ModelStringInput
+	userContactEmail: ModelStringInput
+	userID: ModelIDInput
+}
+
+input ModelKnowledgeBaseConditionInput {
+	BackupUrl: ModelStringInput
+	S3Url: ModelStringInput
+	_deleted: ModelBooleanInput
+	access: ModelAccessInput
+	actionBoardID: ModelIDInput
+	and: [ModelKnowledgeBaseConditionInput]
+	comments: ModelStringInput
+	context: ModelStringInput
+	createdAt: ModelStringInput
+	downlaods: ModelIntInput
+	encrypt: ModelStringInput
+	liked: ModelIntInput
+	marketplace: ModelBooleanInput
+	name: ModelStringInput
+	not: ModelKnowledgeBaseConditionInput
+	or: [ModelKnowledgeBaseConditionInput]
+	tags: ModelStringInput
+	text: ModelStringInput
+	updatedAt: ModelStringInput
+	validated: ModelBooleanInput
+}
+
+type ModelKnowledgeBaseConnection @aws_api_key
+@aws_iam {
+	items: [KnowledgeBase]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelKnowledgeBaseFilterInput {
+	BackupUrl: ModelStringInput
+	S3Url: ModelStringInput
+	_deleted: ModelBooleanInput
+	access: ModelAccessInput
+	actionBoardID: ModelIDInput
+	and: [ModelKnowledgeBaseFilterInput]
+	comments: ModelStringInput
+	context: ModelStringInput
+	createdAt: ModelStringInput
+	downlaods: ModelIntInput
+	encrypt: ModelStringInput
+	id: ModelIDInput
+	liked: ModelIntInput
+	marketplace: ModelBooleanInput
+	name: ModelStringInput
+	not: ModelKnowledgeBaseFilterInput
+	or: [ModelKnowledgeBaseFilterInput]
+	tags: ModelStringInput
+	text: ModelStringInput
+	updatedAt: ModelStringInput
+	validated: ModelBooleanInput
+}
+
+input ModelMembershipStatusInput {
+	eq: MembershipStatus
+	ne: MembershipStatus
+}
+
+input ModelMessageConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelMessageConditionInput]
+	content: ModelStringInput
+	conversationID: ModelIDInput
+	createdAt: ModelStringInput
+	not: ModelMessageConditionInput
+	or: [ModelMessageConditionInput]
+	role: ModelStringInput
+	timeStamp: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+type ModelMessageConnection @aws_api_key
+@aws_iam {
+	items: [Message]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelMessageFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelMessageFilterInput]
+	content: ModelStringInput
+	conversationID: ModelIDInput
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	not: ModelMessageFilterInput
+	or: [ModelMessageFilterInput]
+	role: ModelStringInput
+	timeStamp: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+input ModelOrgConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelOrgConditionInput]
+	createdAt: ModelStringInput
+	not: ModelOrgConditionInput
+	or: [ModelOrgConditionInput]
+	orgBillingAddress: ModelStringInput
+	orgIndustry: ModelStringInput
+	orgName: ModelStringInput
+	orgOrgAdminId: ModelIDInput
+	orgWebsite: ModelStringInput
+	tenantId: ModelStringInput
+	updatedAt: ModelStringInput
+	verified: ModelBooleanInput
+}
+
+type ModelOrgConnection @aws_api_key
+@aws_iam {
+	items: [Org]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelOrgFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelOrgFilterInput]
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	not: ModelOrgFilterInput
+	or: [ModelOrgFilterInput]
+	orgBillingAddress: ModelStringInput
+	orgIndustry: ModelStringInput
+	orgName: ModelStringInput
+	orgOrgAdminId: ModelIDInput
+	orgWebsite: ModelStringInput
+	tenantId: ModelStringInput
+	updatedAt: ModelStringInput
+	verified: ModelBooleanInput
+}
+
+input ModelPremiumBoardConditionInput {
+	_deleted: ModelBooleanInput
+	active: ModelBooleanInput
+	aiModel: ModelStringInput
+	and: [ModelPremiumBoardConditionInput]
+	budget: ModelFloatInput
+	createdAt: ModelStringInput
+	description: ModelStringInput
+	details: ModelStringInput
+	goal: ModelStringInput
+	link: ModelStringInput
+	name: ModelStringInput
+	not: ModelPremiumBoardConditionInput
+	or: [ModelPremiumBoardConditionInput]
+	owner: ModelIDInput
+	public: ModelBooleanInput
+	updatedAt: ModelStringInput
+	usersCount: ModelIntInput
+}
+
+type ModelPremiumBoardConnection @aws_api_key
+@aws_iam {
+	items: [PremiumBoard]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelPremiumBoardFilterInput {
+	_deleted: ModelBooleanInput
+	active: ModelBooleanInput
+	aiModel: ModelStringInput
+	and: [ModelPremiumBoardFilterInput]
+	budget: ModelFloatInput
+	createdAt: ModelStringInput
+	description: ModelStringInput
+	details: ModelStringInput
+	goal: ModelStringInput
+	id: ModelIDInput
+	link: ModelStringInput
+	name: ModelStringInput
+	not: ModelPremiumBoardFilterInput
+	or: [ModelPremiumBoardFilterInput]
+	owner: ModelIDInput
+	public: ModelBooleanInput
+	updatedAt: ModelStringInput
+	usersCount: ModelIntInput
+}
+
+input ModelPremiumBoardMembershipConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelPremiumBoardMembershipConditionInput]
+	boardID: ModelIDInput
+	createdAt: ModelStringInput
+	joinDate: ModelStringInput
+	lastActiveDate: ModelStringInput
+	not: ModelPremiumBoardMembershipConditionInput
+	or: [ModelPremiumBoardMembershipConditionInput]
+	role: ModelRoleInput
+	settings: ModelStringInput
+	status: ModelMembershipStatusInput
+	updatedAt: ModelStringInput
+	userID: ModelIDInput
+}
+
+type ModelPremiumBoardMembershipConnection @aws_api_key
+@aws_iam {
+	items: [PremiumBoardMembership]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelPremiumBoardMembershipFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelPremiumBoardMembershipFilterInput]
+	boardID: ModelIDInput
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	joinDate: ModelStringInput
+	lastActiveDate: ModelStringInput
+	not: ModelPremiumBoardMembershipFilterInput
+	or: [ModelPremiumBoardMembershipFilterInput]
+	role: ModelRoleInput
+	settings: ModelStringInput
+	status: ModelMembershipStatusInput
+	updatedAt: ModelStringInput
+	userID: ModelIDInput
+}
+
+input ModelPromptConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelPromptConditionInput]
+	content: ModelStringInput
+	createdAt: ModelStringInput
+	name: ModelStringInput
+	not: ModelPromptConditionInput
+	or: [ModelPromptConditionInput]
+	tags: ModelStringInput
+	updatedAt: ModelStringInput
+	values: ModelStringInput
+}
+
+type ModelPromptConnection @aws_api_key
+@aws_iam {
+	items: [Prompt]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelPromptFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelPromptFilterInput]
+	content: ModelStringInput
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	name: ModelStringInput
+	not: ModelPromptFilterInput
+	or: [ModelPromptFilterInput]
+	tags: ModelStringInput
+	updatedAt: ModelStringInput
+	values: ModelStringInput
+}
+
+input ModelReviewConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelReviewConditionInput]
+	boardID: ModelIDInput
+	comment: ModelStringInput
+	createdAt: ModelStringInput
+	likes: ModelIntInput
+	not: ModelReviewConditionInput
+	or: [ModelReviewConditionInput]
+	parentReviewID: ModelIDInput
+	rating: ModelIntInput
+	updatedAt: ModelStringInput
+	userName: ModelStringInput
+}
+
+type ModelReviewConnection @aws_api_key
+@aws_iam {
+	items: [Review]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelReviewFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelReviewFilterInput]
+	boardID: ModelIDInput
+	comment: ModelStringInput
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	likes: ModelIntInput
+	not: ModelReviewFilterInput
+	or: [ModelReviewFilterInput]
+	parentReviewID: ModelIDInput
+	rating: ModelIntInput
+	updatedAt: ModelStringInput
+	userName: ModelStringInput
+}
+
+input ModelRoleInput {
+	eq: Role
+	ne: Role
+}
+
+input ModelSizeInput {
+	between: [Int]
+	eq: Int
+	ge: Int
+	gt: Int
+	le: Int
+	lt: Int
+	ne: Int
+}
+
+enum ModelSortDirection {
+	ASC
+	DESC
+}
+
+input ModelSponsoredBoardConditionInput {
+	_deleted: ModelBooleanInput
+	active: ModelBooleanInput
+	aiModel: ModelStringInput
+	and: [ModelSponsoredBoardConditionInput]
+	budget: ModelFloatInput
+	createdAt: ModelStringInput
+	description: ModelStringInput
+	details: ModelStringInput
+	goal: ModelStringInput
+	link: ModelStringInput
+	name: ModelStringInput
+	not: ModelSponsoredBoardConditionInput
+	or: [ModelSponsoredBoardConditionInput]
+	owner: ModelIDInput
+	public: ModelBooleanInput
+	updatedAt: ModelStringInput
+	usersCount: ModelIntInput
+}
+
+type ModelSponsoredBoardConnection @aws_api_key
+@aws_iam {
+	items: [SponsoredBoard]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelSponsoredBoardFilterInput {
+	_deleted: ModelBooleanInput
+	active: ModelBooleanInput
+	aiModel: ModelStringInput
+	and: [ModelSponsoredBoardFilterInput]
+	budget: ModelFloatInput
+	createdAt: ModelStringInput
+	description: ModelStringInput
+	details: ModelStringInput
+	goal: ModelStringInput
+	id: ModelIDInput
+	link: ModelStringInput
+	name: ModelStringInput
+	not: ModelSponsoredBoardFilterInput
+	or: [ModelSponsoredBoardFilterInput]
+	owner: ModelIDInput
+	public: ModelBooleanInput
+	updatedAt: ModelStringInput
+	usersCount: ModelIntInput
+}
+
+input ModelSponsoredBoardMembershipConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSponsoredBoardMembershipConditionInput]
+	boardID: ModelIDInput
+	createdAt: ModelStringInput
+	joinDate: ModelStringInput
+	lastActiveDate: ModelStringInput
+	not: ModelSponsoredBoardMembershipConditionInput
+	or: [ModelSponsoredBoardMembershipConditionInput]
+	role: ModelRoleInput
+	settings: ModelStringInput
+	status: ModelMembershipStatusInput
+	updatedAt: ModelStringInput
+	userID: ModelIDInput
+}
+
+type ModelSponsoredBoardMembershipConnection @aws_api_key
+@aws_iam {
+	items: [SponsoredBoardMembership]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelSponsoredBoardMembershipFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSponsoredBoardMembershipFilterInput]
+	boardID: ModelIDInput
+	createdAt: ModelStringInput
+	id: ModelIDInput
+	joinDate: ModelStringInput
+	lastActiveDate: ModelStringInput
+	not: ModelSponsoredBoardMembershipFilterInput
+	or: [ModelSponsoredBoardMembershipFilterInput]
+	role: ModelRoleInput
+	settings: ModelStringInput
+	status: ModelMembershipStatusInput
+	updatedAt: ModelStringInput
+	userID: ModelIDInput
+}
+
+input ModelStatusInput {
+	eq: Status
+	ne: Status
+}
+
+input ModelStringInput {
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	beginsWith: String
+	between: [String]
+	contains: String
+	eq: String
+	ge: String
+	gt: String
+	le: String
+	lt: String
+	ne: String
+	notContains: String
+	size: ModelSizeInput
+}
+
+input ModelSubscriptionActionAssistFilterInput {
+	ActionStatus: ModelSubscriptionStringInput
+	Complexity: ModelSubscriptionStringInput
+	Due_date: ModelSubscriptionStringInput
+	Encrypt: ModelSubscriptionBooleanInput
+	EstimatedTime: ModelSubscriptionStringInput
+	GuardRails: ModelSubscriptionStringInput
+	History: ModelSubscriptionStringInput
+	KBLink: ModelSubscriptionStringInput
+	Notes: ModelSubscriptionStringInput
+	Notify: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	actionItem: ModelSubscriptionStringInput
+	actionboardID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionActionAssistFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	dependencies: ModelSubscriptionStringInput
+	description: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	knowledgeBaseID: ModelSubscriptionIDInput
+	or: [ModelSubscriptionActionAssistFilterInput]
+	priority: ModelSubscriptionStringInput
+	tags: ModelSubscriptionStringInput
+	tools: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	userLike: ModelSubscriptionIntInput
+}
+
+input ModelSubscriptionActionFilterInput {
+	Accepted: ModelSubscriptionBooleanInput
+	ActionItem: ModelSubscriptionStringInput
+	ActionStatus: ModelSubscriptionStringInput
+	Delegate: ModelSubscriptionBooleanInput
+	Due_date: ModelSubscriptionStringInput
+	Encrypt: ModelSubscriptionBooleanInput
+	GuardRails: ModelSubscriptionStringInput
+	History: ModelSubscriptionStringInput
+	Ignore: ModelSubscriptionBooleanInput
+	KBLink: ModelSubscriptionStringInput
+	Notes: ModelSubscriptionStringInput
+	Notify: ModelSubscriptionStringInput
+	Owner: ModelSubscriptionStringInput
+	Type: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	actionlistID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionActionFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	isImportant: ModelSubscriptionBooleanInput
+	isUrgent: ModelSubscriptionBooleanInput
+	knowledgeBaseID: ModelSubscriptionIDInput
+	or: [ModelSubscriptionActionFilterInput]
+	prompt: ModelSubscriptionStringInput
+	tags: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	userLike: ModelSubscriptionIntInput
+}
+
+input ModelSubscriptionActionListFilterInput {
+	Context: ModelSubscriptionStringInput
+	Delegate: ModelSubscriptionBooleanInput
+	DueDate: ModelSubscriptionStringInput
+	Ignore: ModelSubscriptionBooleanInput
+	Tags: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	action: ModelSubscriptionStringInput
+	actionListStatus: ModelSubscriptionStringInput
+	actionboardID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionActionListFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	isImportant: ModelSubscriptionBooleanInput
+	isUrgent: ModelSubscriptionBooleanInput
+	knowledgeBaseID: ModelSubscriptionIDInput
+	notes: ModelSubscriptionStringInput
+	or: [ModelSubscriptionActionListFilterInput]
+	savedBy: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionAutoActionFilterInput {
+	Accepted: ModelSubscriptionBooleanInput
+	ActionItem: ModelSubscriptionStringInput
+	ActionStatus: ModelSubscriptionStringInput
+	Delegate: ModelSubscriptionBooleanInput
+	Encrypt: ModelSubscriptionBooleanInput
+	GuardRails: ModelSubscriptionStringInput
+	History: ModelSubscriptionStringInput
+	Ignore: ModelSubscriptionBooleanInput
+	KBLink: ModelSubscriptionStringInput
+	Notes: ModelSubscriptionStringInput
+	Notify: ModelSubscriptionStringInput
+	Owner: ModelSubscriptionStringInput
+	Type: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	actionboardID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionAutoActionFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	due_date: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	isImportant: ModelSubscriptionBooleanInput
+	isUrgent: ModelSubscriptionBooleanInput
+	knowledgeBaseID: ModelSubscriptionIDInput
+	or: [ModelSubscriptionAutoActionFilterInput]
+	permissions: ModelSubscriptionStringInput
+	prompt: ModelSubscriptionStringInput
+	tags: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	userLike: ModelSubscriptionIntInput
+}
+
+input ModelSubscriptionAutoActionPromptFilterInput {
+	id: ModelSubscriptionIDInput
+	name: ModelSubscriptionStringInput
+	description: ModelSubscriptionStringInput
+	template: ModelSubscriptionStringInput
+	steps: ModelSubscriptionStringInput
+	script: ModelSubscriptionStringInput
+	actionboardID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionAutoActionPromptFilterInput]
+	or: [ModelSubscriptionAutoActionPromptFilterInput]
+	_deleted: ModelBooleanInput
+	createdAt: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionBooleanInput {
+	eq: Boolean
+	ne: Boolean
+}
+
+input ModelSubscriptionCommunityBoardFilterInput {
+	_deleted: ModelBooleanInput
+	active: ModelSubscriptionBooleanInput
+	aiModel: ModelSubscriptionStringInput
+	and: [ModelSubscriptionCommunityBoardFilterInput]
+	budget: ModelSubscriptionFloatInput
+	createdAt: ModelSubscriptionStringInput
+	description: ModelSubscriptionStringInput
+	details: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	likes: ModelSubscriptionIntInput
+	link: ModelSubscriptionStringInput
+	name: ModelSubscriptionStringInput
+	or: [ModelSubscriptionCommunityBoardFilterInput]
+	owner: ModelSubscriptionIDInput
+	price: ModelSubscriptionFloatInput
+	public: ModelSubscriptionBooleanInput
+	updatedAt: ModelSubscriptionStringInput
+	usersCount: ModelSubscriptionIntInput
+}
+
+input ModelSubscriptionCommunityBoardMembershipFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionCommunityBoardMembershipFilterInput]
+	boardID: ModelSubscriptionIDInput
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	joinDate: ModelSubscriptionStringInput
+	lastActiveDate: ModelSubscriptionStringInput
+	or: [ModelSubscriptionCommunityBoardMembershipFilterInput]
+	role: ModelSubscriptionStringInput
+	settings: ModelSubscriptionStringInput
+	status: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	userID: ModelSubscriptionIDInput
+}
+
+input ModelSubscriptionConversationFilterInput {
+	DateTime: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	actionID: ModelSubscriptionIDInput
+	actionboardID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionConversationFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	encrypt: ModelSubscriptionBooleanInput
+	id: ModelSubscriptionIDInput
+	or: [ModelSubscriptionConversationFilterInput]
+	updatedAt: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionFloatInput {
+	between: [Float]
+	eq: Float
+	ge: Float
+	gt: Float
+	in: [Float]
+	le: Float
+	lt: Float
+	ne: Float
+	notIn: [Float]
+}
+
+input ModelSubscriptionIDInput {
+	beginsWith: ID
+	between: [ID]
+	contains: ID
+	eq: ID
+	ge: ID
+	gt: ID
+	in: [ID]
+	le: ID
+	lt: ID
+	ne: ID
+	notContains: ID
+	notIn: [ID]
+}
+
+input ModelSubscriptionIntInput {
+	between: [Int]
+	eq: Int
+	ge: Int
+	gt: Int
+	in: [Int]
+	le: Int
+	lt: Int
+	ne: Int
+	notIn: [Int]
+}
+
+input ModelSubscriptionIssuesFilterInput {
+	_deleted: ModelBooleanInput
+	actionboardID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionIssuesFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	date: ModelSubscriptionStringInput
+	details: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	name: ModelSubscriptionStringInput
+	or: [ModelSubscriptionIssuesFilterInput]
+	updatedAt: ModelSubscriptionStringInput
+	userContactEmail: ModelSubscriptionStringInput
+	userID: ModelSubscriptionIDInput
+}
+
+input ModelSubscriptionKnowledgeBaseFilterInput {
+	BackupUrl: ModelSubscriptionStringInput
+	S3Url: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	access: ModelSubscriptionStringInput
+	actionBoardID: ModelSubscriptionIDInput
+	and: [ModelSubscriptionKnowledgeBaseFilterInput]
+	comments: ModelSubscriptionStringInput
+	context: ModelSubscriptionStringInput
+	createdAt: ModelSubscriptionStringInput
+	downlaods: ModelSubscriptionIntInput
+	encrypt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	liked: ModelSubscriptionIntInput
+	marketplace: ModelSubscriptionBooleanInput
+	name: ModelSubscriptionStringInput
+	or: [ModelSubscriptionKnowledgeBaseFilterInput]
+	tags: ModelSubscriptionStringInput
+	text: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	validated: ModelSubscriptionBooleanInput
+}
+
+input ModelSubscriptionMessageFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionMessageFilterInput]
+	content: ModelSubscriptionStringInput
+	conversationID: ModelSubscriptionIDInput
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	or: [ModelSubscriptionMessageFilterInput]
+	role: ModelSubscriptionStringInput
+	timeStamp: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionOrgFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionOrgFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	or: [ModelSubscriptionOrgFilterInput]
+	orgBillingAddress: ModelSubscriptionStringInput
+	orgIndustry: ModelSubscriptionStringInput
+	orgName: ModelSubscriptionStringInput
+	orgOrgAdminId: ModelSubscriptionIDInput
+	orgWebsite: ModelSubscriptionStringInput
+	tenantId: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	verified: ModelSubscriptionBooleanInput
+}
+
+input ModelSubscriptionPremiumBoardFilterInput {
+	_deleted: ModelBooleanInput
+	active: ModelSubscriptionBooleanInput
+	aiModel: ModelSubscriptionStringInput
+	and: [ModelSubscriptionPremiumBoardFilterInput]
+	budget: ModelSubscriptionFloatInput
+	createdAt: ModelSubscriptionStringInput
+	description: ModelSubscriptionStringInput
+	details: ModelSubscriptionStringInput
+	goal: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	link: ModelSubscriptionStringInput
+	name: ModelSubscriptionStringInput
+	or: [ModelSubscriptionPremiumBoardFilterInput]
+	owner: ModelSubscriptionIDInput
+	public: ModelSubscriptionBooleanInput
+	updatedAt: ModelSubscriptionStringInput
+	usersCount: ModelSubscriptionIntInput
+}
+
+input ModelSubscriptionPremiumBoardMembershipFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionPremiumBoardMembershipFilterInput]
+	boardID: ModelSubscriptionIDInput
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	joinDate: ModelSubscriptionStringInput
+	lastActiveDate: ModelSubscriptionStringInput
+	or: [ModelSubscriptionPremiumBoardMembershipFilterInput]
+	role: ModelSubscriptionStringInput
+	settings: ModelSubscriptionStringInput
+	status: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	userID: ModelSubscriptionIDInput
+}
+
+input ModelSubscriptionPromptFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionPromptFilterInput]
+	content: ModelSubscriptionStringInput
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	name: ModelSubscriptionStringInput
+	or: [ModelSubscriptionPromptFilterInput]
+	tags: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	values: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionReviewFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionReviewFilterInput]
+	boardID: ModelSubscriptionIDInput
+	comment: ModelSubscriptionStringInput
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	likes: ModelSubscriptionIntInput
+	or: [ModelSubscriptionReviewFilterInput]
+	parentReviewID: ModelSubscriptionIDInput
+	rating: ModelSubscriptionIntInput
+	updatedAt: ModelSubscriptionStringInput
+	userName: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionSponsoredBoardFilterInput {
+	_deleted: ModelBooleanInput
+	active: ModelSubscriptionBooleanInput
+	aiModel: ModelSubscriptionStringInput
+	and: [ModelSubscriptionSponsoredBoardFilterInput]
+	budget: ModelSubscriptionFloatInput
+	createdAt: ModelSubscriptionStringInput
+	description: ModelSubscriptionStringInput
+	details: ModelSubscriptionStringInput
+	goal: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	link: ModelSubscriptionStringInput
+	name: ModelSubscriptionStringInput
+	or: [ModelSubscriptionSponsoredBoardFilterInput]
+	owner: ModelSubscriptionIDInput
+	public: ModelSubscriptionBooleanInput
+	updatedAt: ModelSubscriptionStringInput
+	usersCount: ModelSubscriptionIntInput
+}
+
+input ModelSubscriptionSponsoredBoardMembershipFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionSponsoredBoardMembershipFilterInput]
+	boardID: ModelSubscriptionIDInput
+	createdAt: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	joinDate: ModelSubscriptionStringInput
+	lastActiveDate: ModelSubscriptionStringInput
+	or: [ModelSubscriptionSponsoredBoardMembershipFilterInput]
+	role: ModelSubscriptionStringInput
+	settings: ModelSubscriptionStringInput
+	status: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	userID: ModelSubscriptionIDInput
+}
+
+input ModelSubscriptionStringInput {
+	beginsWith: String
+	between: [String]
+	contains: String
+	eq: String
+	ge: String
+	gt: String
+	in: [String]
+	le: String
+	lt: String
+	ne: String
+	notContains: String
+	notIn: [String]
+}
+
+input ModelSubscriptionUserFilterInput {
+	Active: ModelSubscriptionBooleanInput
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionUserFilterInput]
+	cognitoID: ModelSubscriptionStringInput
+	createdAt: ModelSubscriptionStringInput
+	email: ModelSubscriptionStringInput
+	firstName: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	lastName: ModelSubscriptionStringInput
+	or: [ModelSubscriptionUserFilterInput]
+	orgID: ModelSubscriptionIDInput
+	role: ModelSubscriptionStringInput
+	s3link: ModelSubscriptionStringInput
+	securityStoreID: ModelSubscriptionStringInput
+	startDate: ModelSubscriptionStringInput
+	stripeCustomerID: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	userName: ModelSubscriptionStringInput
+}
+
+input ModelSubscriptionUserGuideFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionUserGuideFilterInput]
+	createdAt: ModelSubscriptionStringInput
+	details: ModelSubscriptionStringInput
+	id: ModelSubscriptionIDInput
+	or: [ModelSubscriptionUserGuideFilterInput]
+	updateDate: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+}
+
+input ModelUserConditionInput {
+	Active: ModelBooleanInput
+	_deleted: ModelBooleanInput
+	and: [ModelUserConditionInput]
+	cognitoID: ModelStringInput
+	createdAt: ModelStringInput
+	email: ModelStringInput
+	firstName: ModelStringInput
+	lastName: ModelStringInput
+	not: ModelUserConditionInput
+	or: [ModelUserConditionInput]
+	orgID: ModelIDInput
+	role: ModelStringInput
+	s3link: ModelStringInput
+	securityStoreID: ModelStringInput
+	startDate: ModelStringInput
+	stripeCustomerID: ModelStringInput
+	updatedAt: ModelStringInput
+	userName: ModelStringInput
+}
+
+type ModelUserConnection @aws_api_key
+@aws_iam {
+	items: [User]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelUserFilterInput {
+	Active: ModelBooleanInput
+	_deleted: ModelBooleanInput
+	and: [ModelUserFilterInput]
+	cognitoID: ModelStringInput
+	createdAt: ModelStringInput
+	email: ModelStringInput
+	firstName: ModelStringInput
+	id: ModelIDInput
+	lastName: ModelStringInput
+	not: ModelUserFilterInput
+	or: [ModelUserFilterInput]
+	orgID: ModelIDInput
+	role: ModelStringInput
+	s3link: ModelStringInput
+	securityStoreID: ModelStringInput
+	startDate: ModelStringInput
+	stripeCustomerID: ModelStringInput
+	updatedAt: ModelStringInput
+	userName: ModelStringInput
+}
+
+input ModelUserGuideConditionInput {
+	_deleted: ModelBooleanInput
+	and: [ModelUserGuideConditionInput]
+	createdAt: ModelStringInput
+	details: ModelStringInput
+	not: ModelUserGuideConditionInput
+	or: [ModelUserGuideConditionInput]
+	updateDate: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+type ModelUserGuideConnection @aws_api_key
+@aws_iam {
+	items: [UserGuide]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelUserGuideFilterInput {
+	_deleted: ModelBooleanInput
+	and: [ModelUserGuideFilterInput]
+	createdAt: ModelStringInput
+	details: ModelStringInput
+	id: ModelIDInput
+	not: ModelUserGuideFilterInput
+	or: [ModelUserGuideFilterInput]
+	updateDate: ModelStringInput
+	updatedAt: ModelStringInput
+}
+
+type Org @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	boards(
+		filter: ModelSponsoredBoardFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelSponsoredBoardConnection
+	createdAt: AWSDateTime
+	employees(
+		filter: ModelUserFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelUserConnection
+	id: ID!
+	orgAdmin: User!
+	orgBillingAddress: String
+	orgContacts: [OrgContact]
+	orgIndustry: String
+	orgName: String
+	orgOrgAdminId: ID!
+	orgWebsite: String
+	tenantId: String
+	updatedAt: AWSDateTime
+	verified: Boolean
+}
+
+type OrgContact @aws_api_key
+@aws_iam {
+	address: String
+	email: AWSEmail
+	phone: String
+}
+
+input OrgContactInput {
+	address: String
+	email: AWSEmail
+	phone: String
+}
+
+type PremiumBoard implements Board @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	actionLists(
+		filter: ModelActionListFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+	active: Boolean
+	aiModel: String
+	autoactions(
+		filter: ModelAutoActionFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelAutoActionConnection
+	budget: Float
+	createdAt: AWSDateTime!
+	description: String
+	details: AWSJSON
+	goal: String
+	id: ID!
+	issues(
+		filter: ModelIssuesFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelIssuesConnection
+	knowledgeBases(
+		filter: ModelKnowledgeBaseFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelKnowledgeBaseConnection
+	link: String
+	memberships(
+		filter: ModelPremiumBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelPremiumBoardMembershipConnection
+	name: String!
+	owner: ID
+	public: Boolean
+	reviews(
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelReviewConnection
+	updatedAt: AWSDateTime!
+	usersCount: Int!
+}
+
+type PremiumBoardMembership implements BaseMembership @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	board: PremiumBoard!
+	boardID: ID!
+	createdAt: AWSDateTime!
+	id: ID!
+	joinDate: AWSDateTime!
+	lastActiveDate: AWSDateTime
+	role: Role!
+	settings: AWSJSON
+	status: MembershipStatus!
+	updatedAt: AWSDateTime!
+	user: User!
+	userID: ID!
+}
+
+type Prompt @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	content: String
+	createdAt: AWSDateTime!
+	id: ID!
+	name: String
+	tags: [String]
+	updatedAt: AWSDateTime!
+	values: AWSJSON
+}
+
+type Review @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	boardID: ID!
+	comment: String
+	createdAt: AWSDateTime!
+	id: ID!
+	likes: Int
+	parentReviewID: ID
+	rating: Int!
+	replies(
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelReviewConnection
+	updatedAt: AWSDateTime!
+	userName: String!
+}
+
+enum Role {
+	Admin
+	Contributor
+	Owner
+}
+
+type SimpleResponse {
+	success: Boolean!
+	message: String!
+}
+
+type SponsoredBoard implements Board @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	actionLists(
+		filter: ModelActionListFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+	active: Boolean
+	aiModel: String
+	autoactions(
+		filter: ModelAutoActionFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelAutoActionConnection
+	budget: Float
+	createdAt: AWSDateTime!
+	description: String
+	details: AWSJSON
+	goal: String
+	id: ID!
+	issues(
+		filter: ModelIssuesFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelIssuesConnection
+	knowledgeBases(
+		filter: ModelKnowledgeBaseFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelKnowledgeBaseConnection
+	link: String
+	memberships(
+		filter: ModelSponsoredBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelSponsoredBoardMembershipConnection
+	name: String!
+	owner: ID
+	public: Boolean
+	reviews(
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelReviewConnection
+	updatedAt: AWSDateTime!
+	usersCount: Int!
+}
+
+type SponsoredBoardMembership implements BaseMembership @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	board: SponsoredBoard!
+	boardID: ID!
+	createdAt: AWSDateTime!
+	id: ID!
+	joinDate: AWSDateTime!
+	lastActiveDate: AWSDateTime
+	role: Role!
+	settings: AWSJSON
+	status: MembershipStatus!
+	updatedAt: AWSDateTime!
+	user: User!
+	userID: ID!
+}
+
+enum Status {
+	Active
+	Done
+	In_Progress
+	New
+	Todo
+	AutoActionAiAgent
+	ActionAssistAgent
+}
+
+input TableBoardUserActivityFilterInput {
+	id: TableIDFilterInput
+	userID: TableIDFilterInput
+	boardID: TableIDFilterInput
+	activityType: ModelActivityTypeInput
+	resourceID: TableIDFilterInput
+	createdAt: TableStringFilterInput
+	updatedAt: TableStringFilterInput
+	_version: TableIntFilterInput
+	_lastChangedAt: TableIntFilterInput
+	_deleted: TableBooleanFilterInput
+}
+
+input TableBooleanFilterInput {
+	ne: Boolean
+	eq: Boolean
+	attributeExists: Boolean
+}
+
+input TableFloatFilterInput {
+	ne: Float
+	eq: Float
+	le: Float
+	lt: Float
+	ge: Float
+	gt: Float
+	between: [Float]
+	attributeExists: Boolean
+}
+
+input TableIDFilterInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	attributeExists: Boolean
+	size: ModelSizeInput
+}
+
+input TableIntFilterInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+	attributeExists: Boolean
+}
+
+input TableStringFilterInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+	attributeExists: Boolean
+	size: ModelSizeInput
+}
+
+type TransferInfo {
+	transferStatus: TransferStatus
+	transferRequestByUserInfo: ActionListTransferUserInfo
+	transferAcceptByUserInfo: ActionListTransferUserInfo
+	transferRejectByUserInfo: ActionListTransferUserInfo
+	transferRequestTime: AWSDateTime
+	transferAcceptTime: AWSDateTime
+	transferRejectTime: AWSDateTime
+}
+
+enum TransferStatus {
+	REQUESTED
+	ACCEPTED
+	REJECTED
+}
+
+input UpdateActionAssistInput {
+	ActionStatus: Status
+	Complexity: String
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	EstimatedTime: String
+	GuardRails: AWSJSON
+	History: AWSJSON
+	KBLink: [String]
+	Notes: String
+	Notify: String
+	_version: Int
+	actionItem: String
+	actionboardID: ID
+	dependencies: [String]
+	description: String
+	id: ID!
+	knowledgeBaseID: ID
+	priority: String
+	tags: [String]
+	tools: [String]
+	userLike: Int
+}
+
+input UpdateActionGoalInput {
+	id: ID!
+	title: String
+	priority: String
+	boardID: ID
+	roleId: ID
+}
+
+input UpdateActionInput {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Delegate: Boolean
+	Due_date: AWSDateTime
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	Ignore: Boolean
+	FileUrls: [String]
+	KBLink: [String]
+	Notes: [String]
+	Notify: String
+	Owner: String
+	Type: String
+	_version: Int
+	actionlistID: ID
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	prompt: String
+	tags: [String]
+	userLike: Int
+	orderRank: Int
+}
+
+input UpdateActionListInput {
+	Context: String
+	Delegate: Boolean
+	DueDate: AWSDateTime
+	Ignore: Boolean
+	Tags: [String]
+	_version: Int
+	action: String
+	actionListStatus: Status
+	actionboardID: ID
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	notes: String
+	savedBy: String
+	orderRank: Int
+}
+
+input UpdateAutoActionInput {
+	Accepted: Boolean
+	ActionItem: String
+	ActionStatus: Status
+	Delegate: Boolean
+	Encrypt: Boolean
+	GuardRails: AWSJSON
+	History: AWSJSON
+	Ignore: Boolean
+	FileUrls: [String]
+	KBLink: String
+	Notes: [String]
+	Notify: String
+	Owner: String
+	Type: String
+	_version: Int
+	actionboardID: ID
+	due_date: AWSDateTime
+	id: ID!
+	isImportant: Boolean
+	isUrgent: Boolean
+	knowledgeBaseID: ID
+	permissions: [String]
+	prompt: String
+	tags: [String]
+	userLike: Int
+}
+
+input UpdateAutoActionPromptInput {
+	id: ID!
+	name: String
+	description: String
+	template: String
+	steps: [String]
+	script: String
+	actionboardID: ID
+	_version: Int
+}
+
+input UpdateAvailableRoleInput {
+	id: ID!
+	name: String
+	description: String
+	prompt: String
+	boardID: ID
+	isDefault: Boolean
+}
+
+input UpdateBoardRoleDefinitionInput {
+	id: ID!
+	boardID: ID
+	name: String
+	description: String
+	prompt: String
+}
+
+input UpdateBoardUserActivityInput {
+	id: ID!
+	userID: ID
+	boardID: ID
+	activityType: ActivityType
+	activityDetail: AWSJSON
+	resourceID: ID
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+	_version: Int
+	_lastChangedAt: AWSDateTime
+	_deleted: Boolean
+}
+
+input UpdateCommunityBoardInput {
+	_version: Int
+	active: Boolean
+	aiModel: String
+	budget: Float
+	description: String
+	details: AWSJSON
+	id: ID!
+	likes: Int
+	link: String
+	name: String
+	owner: ID
+	price: Float
+	public: Boolean
+	usersCount: Int
+}
+
+input UpdateCommunityBoardMembershipInput {
+	_version: Int
+	boardID: ID
+	id: ID!
+	joinDate: AWSDateTime
+	lastActiveDate: AWSDateTime
+	role: Role
+	settings: AWSJSON
+	status: MembershipStatus
+	userID: ID
+}
+
+input UpdateCommunityBoardMembershipStatusInput {
+	id: ID!
+	status: MembershipStatus!
+	_version: Int
+}
+
+input UpdateConversationInput {
+	DateTime: AWSDateTime
+	_version: Int
+	actionID: ID
+	actionboardID: ID
+	encrypt: Boolean
+	id: ID!
+}
+
+input UpdateIssuesInput {
+	_version: Int
+	actionboardID: ID
+	date: AWSDateTime
+	details: String
+	id: ID!
+	name: String
+	userContactEmail: AWSEmail
+	userID: ID
+}
+
+input UpdateKnowledgeBaseInput {
+	BackupUrl: String
+	S3Url: [String]
+	_version: Int
+	access: Access
+	actionBoardID: ID
+	comments: AWSJSON
+	context: String
+	downlaods: Int
+	encrypt: String
+	id: ID!
+	liked: Int
+	marketplace: Boolean
+	name: String
+	tags: [String]
+	text: String
+	validated: Boolean
+}
+
+input UpdateMessageInput {
+	_version: Int
+	content: String
+	conversationID: ID
+	id: ID!
+	role: String
+	timeStamp: AWSDateTime
+}
+
+input UpdateOrgInput {
+	_version: Int
+	createdAt: AWSDateTime
+	id: ID!
+	orgBillingAddress: String
+	orgContacts: [OrgContactInput]
+	orgIndustry: String
+	orgName: String
+	orgOrgAdminId: ID
+	orgWebsite: String
+	tenantId: String
+	updatedAt: AWSDateTime
+	verified: Boolean
+}
+
+input UpdatePremiumBoardInput {
+	_version: Int
+	active: Boolean
+	aiModel: String
+	budget: Float
+	description: String
+	details: AWSJSON
+	goal: String
+	id: ID!
+	link: String
+	name: String
+	owner: ID
+	public: Boolean
+	usersCount: Int
+}
+
+input UpdatePremiumBoardMembershipInput {
+	_version: Int
+	boardID: ID
+	id: ID!
+	joinDate: AWSDateTime
+	lastActiveDate: AWSDateTime
+	role: Role
+	settings: AWSJSON
+	status: MembershipStatus
+	userID: ID
+}
+
+input UpdatePromptInput {
+	_version: Int
+	content: String
+	id: ID!
+	name: String
+	tags: [String]
+	values: AWSJSON
+}
+
+input UpdateReviewInput {
+	_version: Int
+	boardID: ID
+	comment: String
+	id: ID!
+	likes: Int
+	parentReviewID: ID
+	rating: Int
+	userName: String
+}
+
+input UpdateSponsoredBoardInput {
+	_version: Int
+	active: Boolean
+	aiModel: String
+	budget: Float
+	description: String
+	details: AWSJSON
+	goal: String
+	id: ID!
+	link: String
+	name: String
+	owner: ID
+	public: Boolean
+	usersCount: Int
+}
+
+input UpdateSponsoredBoardMembershipInput {
+	_version: Int
+	boardID: ID
+	id: ID!
+	joinDate: AWSDateTime
+	lastActiveDate: AWSDateTime
+	role: Role
+	settings: AWSJSON
+	status: MembershipStatus
+	userID: ID
+}
+
+input UpdateUserGuideInput {
+	_version: Int
+	details: String
+	id: ID!
+	updateDate: AWSDateTime
+}
+
+input UpdateUserInput {
+	Active: Boolean
+	_version: Int
+	cognitoID: String
+	email: AWSEmail
+	firstName: String
+	id: ID!
+	lastName: String
+	orgID: ID
+	role: String
+	s3link: String
+	securityStoreID: String
+	startDate: AWSDateTime
+	stripeCustomerID: String
+	userName: String
+}
+
+type User @aws_api_key
+@aws_iam {
+	Active: Boolean
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	cognitoID: String
+	communityBoards(
+		filter: ModelCommunityBoardFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelCommunityBoardConnection
+	communityMemberships(
+		filter: ModelCommunityBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelCommunityBoardMembershipConnection
+	createdAt: AWSDateTime!
+	email: AWSEmail!
+	firstName: String
+	id: ID!
+	issues(
+		filter: ModelIssuesFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelIssuesConnection
+	lastName: String
+	orgID: ID
+	premiumBoards(
+		filter: ModelPremiumBoardFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelPremiumBoardConnection
+	premiumMemberships(
+		filter: ModelPremiumBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelPremiumBoardMembershipConnection
+	reviews(
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelReviewConnection
+	role: String
+	s3link: String
+	savedActionLists(
+		filter: ModelActionListFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+	securityStoreID: String
+	sponsoredMemberships(
+		filter: ModelSponsoredBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelSponsoredBoardMembershipConnection
+	startDate: AWSDateTime
+	stripeCustomerID: String
+	updatedAt: AWSDateTime!
+	userName: String
+}
+
+type UserGuide @aws_api_key
+@aws_iam {
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp!
+	_version: Int!
+	createdAt: AWSDateTime!
+	details: String!
+	id: ID!
+	updateDate: AWSDateTime
+	updatedAt: AWSDateTime!
+}
+
+type Mutation {
+	updateCommunityBoardMembershipStatus(input: UpdateCommunityBoardMembershipStatusInput!): CommunityBoardMembership
+	createPostWithActivity(input: CreatePostInput!): DemoPost
+	transferActionListRequest(input: ActionListTransferInput): SimpleResponse
+	acceptTransferActionListRequest(input: ActionListTransferAcceptRejectInput): SimpleResponse
+	assignUserInActionListOrItem(input: AssignUserInActionListOrItemInput): SimpleResponse
+	rejectTransferActionListRequest(input: ActionListTransferAcceptRejectInput): SimpleResponse
+	createAction(condition: ModelActionConditionInput, input: CreateActionInput!): Action
+		@aws_api_key
+@aws_iam
+	deleteCommunityBoardMembershipByIds(boardID: ID!, userID: ID!): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+	createActionAssist(condition: ModelActionAssistConditionInput, input: CreateActionAssistInput!): ActionAssist
+		@aws_api_key
+@aws_iam
+	createActionList(condition: ModelActionListConditionInput, input: CreateActionListInput!): ActionList
+		@aws_api_key
+@aws_iam
+	createAutoAction(condition: ModelAutoActionConditionInput, input: CreateAutoActionInput!): AutoAction
+		@aws_api_key
+@aws_iam
+	createCommunityBoard(condition: ModelCommunityBoardConditionInput, input: CreateCommunityBoardInput!): CommunityBoard
+		@aws_api_key
+@aws_iam
+	createCommunityBoardMembership(condition: ModelCommunityBoardMembershipConditionInput, input: CreateCommunityBoardMembershipInput!): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+	createConversation(condition: ModelConversationConditionInput, input: CreateConversationInput!): Conversation
+		@aws_api_key
+@aws_iam
+	createIssues(condition: ModelIssuesConditionInput, input: CreateIssuesInput!): Issues
+		@aws_api_key
+@aws_iam
+	createKnowledgeBase(condition: ModelKnowledgeBaseConditionInput, input: CreateKnowledgeBaseInput!): KnowledgeBase
+		@aws_api_key
+@aws_iam
+	createMessage(condition: ModelMessageConditionInput, input: CreateMessageInput!): Message
+		@aws_api_key
+@aws_iam
+	createOrg(condition: ModelOrgConditionInput, input: CreateOrgInput!): Org
+		@aws_api_key
+@aws_iam
+	createPremiumBoard(condition: ModelPremiumBoardConditionInput, input: CreatePremiumBoardInput!): PremiumBoard
+		@aws_api_key
+@aws_iam
+	createPremiumBoardMembership(condition: ModelPremiumBoardMembershipConditionInput, input: CreatePremiumBoardMembershipInput!): PremiumBoardMembership
+		@aws_api_key
+@aws_iam
+	createPrompt(condition: ModelPromptConditionInput, input: CreatePromptInput!): Prompt
+		@aws_api_key
+@aws_iam
+	createReview(condition: ModelReviewConditionInput, input: CreateReviewInput!): Review
+		@aws_api_key
+@aws_iam
+	createSponsoredBoard(condition: ModelSponsoredBoardConditionInput, input: CreateSponsoredBoardInput!): SponsoredBoard
+		@aws_api_key
+@aws_iam
+	createSponsoredBoardMembership(condition: ModelSponsoredBoardMembershipConditionInput, input: CreateSponsoredBoardMembershipInput!): SponsoredBoardMembership
+		@aws_api_key
+@aws_iam
+	createUser(condition: ModelUserConditionInput, input: CreateUserInput!): User
+		@aws_api_key
+@aws_iam
+	createUserGuide(condition: ModelUserGuideConditionInput, input: CreateUserGuideInput!): UserGuide
+		@aws_api_key
+@aws_iam
+	deleteAction(id: ID!): Action
+		@aws_api_key
+	deleteAction_test(actionId: ID!): Boolean
+		@aws_api_key
+@aws_iam
+	deleteActionAssist(condition: ModelActionAssistConditionInput, input: DeleteActionAssistInput!): ActionAssist
+		@aws_api_key
+@aws_iam
+	deleteActionList(condition: ModelActionListConditionInput, input: DeleteActionListInput!): ActionList
+		@aws_api_key
+	deleteActionListWithItems(id: ID!): Boolean
+		@aws_api_key
+	deleteActionsByActionListID(id: ID!): Boolean
+		@aws_api_key
+	deleteActionsByActionListID_test(id: ID!): Boolean
+		@aws_api_key
+@aws_iam
+	deleteAutoAction(condition: ModelAutoActionConditionInput, input: DeleteAutoActionInput!): AutoAction
+		@aws_api_key
+@aws_iam
+	deleteCommunityBoard(condition: ModelCommunityBoardConditionInput, input: DeleteCommunityBoardInput!): CommunityBoard
+		@aws_api_key
+@aws_iam
+	deleteCommunityBoardMembership(condition: ModelCommunityBoardMembershipConditionInput, input: DeleteCommunityBoardMembershipInput!): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+	deleteConversation(condition: ModelConversationConditionInput, input: DeleteConversationInput!): Conversation
+		@aws_api_key
+@aws_iam
+	deleteIssues(condition: ModelIssuesConditionInput, input: DeleteIssuesInput!): Issues
+		@aws_api_key
+@aws_iam
+	deleteKnowledgeBase(condition: ModelKnowledgeBaseConditionInput, input: DeleteKnowledgeBaseInput!): KnowledgeBase
+		@aws_api_key
+@aws_iam
+	deleteMessage(condition: ModelMessageConditionInput, input: DeleteMessageInput!): Message
+		@aws_api_key
+@aws_iam
+	deleteOrg(condition: ModelOrgConditionInput, input: DeleteOrgInput!): Org
+		@aws_api_key
+@aws_iam
+	deletePremiumBoard(condition: ModelPremiumBoardConditionInput, input: DeletePremiumBoardInput!): PremiumBoard
+		@aws_api_key
+@aws_iam
+	deletePremiumBoardMembership(condition: ModelPremiumBoardMembershipConditionInput, input: DeletePremiumBoardMembershipInput!): PremiumBoardMembership
+		@aws_api_key
+@aws_iam
+	deletePrompt(condition: ModelPromptConditionInput, input: DeletePromptInput!): Prompt
+		@aws_api_key
+@aws_iam
+	deleteReview(condition: ModelReviewConditionInput, input: DeleteReviewInput!): Review
+		@aws_api_key
+@aws_iam
+	deleteSponsoredBoard(condition: ModelSponsoredBoardConditionInput, input: DeleteSponsoredBoardInput!): SponsoredBoard
+		@aws_api_key
+@aws_iam
+	deleteSponsoredBoardMembership(condition: ModelSponsoredBoardMembershipConditionInput, input: DeleteSponsoredBoardMembershipInput!): SponsoredBoardMembership
+		@aws_api_key
+@aws_iam
+	deleteUser(condition: ModelUserConditionInput, input: DeleteUserInput!): User
+		@aws_api_key
+@aws_iam
+	deleteUserGuide(condition: ModelUserGuideConditionInput, input: DeleteUserGuideInput!): UserGuide
+		@aws_api_key
+@aws_iam
+	updateAction(condition: ModelActionConditionInput, input: UpdateActionInput!): Action
+		@aws_api_key
+@aws_iam
+	updateActionAssist(condition: ModelActionAssistConditionInput, input: UpdateActionAssistInput!): ActionAssist
+		@aws_api_key
+@aws_iam
+	updateActionList(condition: ModelActionListConditionInput, input: UpdateActionListInput!): ActionList
+		@aws_api_key
+@aws_iam
+	updateAutoAction(condition: ModelAutoActionConditionInput, input: UpdateAutoActionInput!): AutoAction
+		@aws_api_key
+@aws_iam
+	updateCommunityBoard(condition: ModelCommunityBoardConditionInput, input: UpdateCommunityBoardInput!): CommunityBoard
+		@aws_api_key
+@aws_iam
+	updateCommunityBoardMembership(condition: ModelCommunityBoardMembershipConditionInput, input: UpdateCommunityBoardMembershipInput!): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+	updateConversation(condition: ModelConversationConditionInput, input: UpdateConversationInput!): Conversation
+		@aws_api_key
+@aws_iam
+	updateIssues(condition: ModelIssuesConditionInput, input: UpdateIssuesInput!): Issues
+		@aws_api_key
+@aws_iam
+	updateKnowledgeBase(condition: ModelKnowledgeBaseConditionInput, input: UpdateKnowledgeBaseInput!): KnowledgeBase
+		@aws_api_key
+@aws_iam
+	updateMessage(condition: ModelMessageConditionInput, input: UpdateMessageInput!): Message
+		@aws_api_key
+@aws_iam
+	updateOrg(condition: ModelOrgConditionInput, input: UpdateOrgInput!): Org
+		@aws_api_key
+@aws_iam
+	updatePremiumBoard(condition: ModelPremiumBoardConditionInput, input: UpdatePremiumBoardInput!): PremiumBoard
+		@aws_api_key
+@aws_iam
+	updatePremiumBoardMembership(condition: ModelPremiumBoardMembershipConditionInput, input: UpdatePremiumBoardMembershipInput!): PremiumBoardMembership
+		@aws_api_key
+@aws_iam
+	updatePrompt(condition: ModelPromptConditionInput, input: UpdatePromptInput!): Prompt
+		@aws_api_key
+@aws_iam
+	updateReview(condition: ModelReviewConditionInput, input: UpdateReviewInput!): Review
+		@aws_api_key
+@aws_iam
+	updateSponsoredBoard(condition: ModelSponsoredBoardConditionInput, input: UpdateSponsoredBoardInput!): SponsoredBoard
+		@aws_api_key
+@aws_iam
+	updateSponsoredBoardMembership(condition: ModelSponsoredBoardMembershipConditionInput, input: UpdateSponsoredBoardMembershipInput!): SponsoredBoardMembership
+		@aws_api_key
+@aws_iam
+	updateUser(condition: ModelUserConditionInput, input: UpdateUserInput!): User
+		@aws_api_key
+@aws_iam
+	updateUserGuide(condition: ModelUserGuideConditionInput, input: UpdateUserGuideInput!): UserGuide
+		@aws_api_key
+@aws_iam
+	createBoardRoleDefinition(input: CreateBoardRoleDefinitionInput!): BoardRoleDefinition
+		@aws_api_key
+@aws_iam
+	updateBoardRoleDefinition(input: UpdateBoardRoleDefinitionInput!): BoardRoleDefinition
+		@aws_api_key
+@aws_iam
+	deleteBoardRoleDefinition(input: DeleteBoardRoleDefinitionInput!): BoardRoleDefinition
+		@aws_api_key
+@aws_iam
+	createAvailableRole(input: CreateAvailableRoleInput!): BoardRoleDefinition
+		@aws_api_key
+	updateAvailableRole(input: UpdateAvailableRoleInput!): BoardRoleDefinition
+		@aws_api_key
+	deleteAvailableRole(input: DeleteAvailableRoleInput!): BoardRoleDefinition
+		@aws_api_key
+@aws_iam
+	createAutoActionPrompt(condition: ModelAutoActionPromptConditionInput, input: CreateAutoActionPromptInput!): AutoActionPrompt
+		@aws_api_key
+@aws_iam
+	updateAutoActionPrompt(condition: ModelAutoActionPromptConditionInput, input: UpdateAutoActionPromptInput!): AutoActionPrompt
+		@aws_api_key
+@aws_iam
+	deleteAutoActionPrompt(condition: ModelAutoActionPromptConditionInput, input: DeleteAutoActionPromptInput!): AutoActionPrompt
+		@aws_api_key
+@aws_iam
+	createActionGoal(input: CreateActionGoalInput!): ActionGoal
+		@aws_api_key
+@aws_iam
+	updateActionGoal(input: UpdateActionGoalInput!): ActionGoal
+		@aws_api_key
+@aws_iam
+	deleteActionGoal(input: DeleteActionGoalInput!): ActionGoal
+		@aws_api_key
+@aws_iam
+	createBoardUserActivity(input: CreateBoardUserActivityInput!): BoardUserActivity
+		@aws_api_key
+@aws_iam
+	updateBoardUserActivity(input: UpdateBoardUserActivityInput!): BoardUserActivity
+		@aws_api_key
+@aws_iam
+	deleteBoardUserActivity(input: DeleteBoardUserActivityInput!): BoardUserActivity
+		@aws_api_key
+@aws_iam
+}
+
+type Query {
+	getSharedActionlistByBoardId(boardId: ID!): ActionListResponse
+	getUserByEmail(email: String!): User
+		@aws_api_key
+@aws_iam
+	listCommunityBoardMembershipsByBoardID(boardID: ID!): ModelCommunityBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	listCommunityBoardMembershipsByUserID(userID: ID!): ModelCommunityBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	listPost: [DemoPost]
+	actionAssistsByActionboardID(
+		actionboardID: ID!,
+		filter: ModelActionAssistFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionAssistConnection
+		@aws_api_key
+@aws_iam
+	actionAssistsByKnowledgeBaseID(
+		filter: ModelActionAssistFilterInput,
+		knowledgeBaseID: ID!,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionAssistConnection
+		@aws_api_key
+@aws_iam
+	actionListsByActionboardID(
+		actionboardID: ID!,
+		filter: ModelActionListFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+		@aws_api_key
+@aws_iam
+	actionListsByKnowledgeBaseID(
+		filter: ModelActionListFilterInput,
+		knowledgeBaseID: ID!,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+		@aws_api_key
+@aws_iam
+	actionListsBySavedBy(
+		filter: ModelActionListFilterInput,
+		limit: Int,
+		nextToken: String,
+		savedBy: String!,
+		sortDirection: ModelSortDirection
+	): ModelActionListConnection
+		@aws_api_key
+@aws_iam
+	actionsByActionlistID(
+		actionlistID: ID!,
+		filter: ModelActionFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionConnection
+		@aws_api_key
+@aws_iam
+	actionsByKnowledgeBaseID(
+		filter: ModelActionFilterInput,
+		knowledgeBaseID: ID!,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelActionConnection
+		@aws_api_key
+@aws_iam
+	autoActionsByActionboardID(
+		actionboardID: ID!,
+		filter: ModelAutoActionFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelAutoActionConnection
+		@aws_api_key
+@aws_iam
+	autoActionsByKnowledgeBaseID(
+		filter: ModelAutoActionFilterInput,
+		knowledgeBaseID: ID!,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelAutoActionConnection
+		@aws_api_key
+@aws_iam
+	communityBoardMembershipsByBoardID(
+		boardID: ID!,
+		filter: ModelCommunityBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelCommunityBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	communityBoardMembershipsByUserID(
+		filter: ModelCommunityBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection,
+		userID: ID!
+	): ModelCommunityBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	communityBoardsByOwner(
+		filter: ModelCommunityBoardFilterInput,
+		limit: Int,
+		nextToken: String,
+		owner: ID!,
+		sortDirection: ModelSortDirection
+	): ModelCommunityBoardConnection
+		@aws_api_key
+@aws_iam
+	conversationsByActionID(
+		actionID: ID!,
+		filter: ModelConversationFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelConversationConnection
+		@aws_api_key
+@aws_iam
+	conversationsByActionboardID(
+		actionboardID: ID!,
+		filter: ModelConversationFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelConversationConnection
+		@aws_api_key
+@aws_iam
+	getAction(id: ID!): Action
+		@aws_api_key
+	getAction_test(id: ID!): Action
+		@aws_api_key
+	getActionByActionlistID_test(actionlistID: ID!): [Action]
+		@aws_api_key
+@aws_iam
+	getActionAssist(id: ID!): ActionAssist
+		@aws_api_key
+@aws_iam
+	getActionList(id: ID!): ActionList
+		@aws_api_key
+@aws_iam
+	getAutoAction(id: ID!): AutoAction
+		@aws_api_key
+@aws_iam
+	getCommunityBoard(id: ID!): CommunityBoard
+		@aws_api_key
+@aws_iam
+	getCommunityBoardMembership(id: ID!): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+	getConversation(id: ID!): Conversation
+		@aws_api_key
+@aws_iam
+	getIssues(id: ID!): Issues
+		@aws_api_key
+@aws_iam
+	getKnowledgeBase(id: ID!): KnowledgeBase
+		@aws_api_key
+@aws_iam
+	getMessage(id: ID!): Message
+		@aws_api_key
+@aws_iam
+	getOrg(id: ID!): Org
+		@aws_api_key
+@aws_iam
+	getPremiumBoard(id: ID!): PremiumBoard
+		@aws_api_key
+@aws_iam
+	getPremiumBoardMembership(id: ID!): PremiumBoardMembership
+		@aws_api_key
+@aws_iam
+	getPrompt(id: ID!): Prompt
+		@aws_api_key
+@aws_iam
+	getReview(id: ID!): Review
+		@aws_api_key
+@aws_iam
+	getSponsoredBoard(id: ID!): SponsoredBoard
+		@aws_api_key
+@aws_iam
+	getSponsoredBoardMembership(id: ID!): SponsoredBoardMembership
+		@aws_api_key
+@aws_iam
+	getUser(id: ID!): User
+		@aws_api_key
+@aws_iam
+	getUserGuide(id: ID!): UserGuide
+		@aws_api_key
+@aws_iam
+	issuesByActionboardID(
+		actionboardID: ID!,
+		filter: ModelIssuesFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelIssuesConnection
+		@aws_api_key
+@aws_iam
+	issuesByUserID(
+		filter: ModelIssuesFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection,
+		userID: ID!
+	): ModelIssuesConnection
+		@aws_api_key
+@aws_iam
+	knowledgeBasesByActionBoardID(
+		actionBoardID: ID!,
+		filter: ModelKnowledgeBaseFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelKnowledgeBaseConnection
+		@aws_api_key
+@aws_iam
+	listActionAssists(filter: ModelActionAssistFilterInput, limit: Int, nextToken: String): ModelActionAssistConnection
+		@aws_api_key
+@aws_iam
+	listActionLists(filter: ModelActionListFilterInput, limit: Int, nextToken: String): ModelActionListConnection
+		@aws_api_key
+@aws_iam
+	listActions(filter: ModelActionFilterInput, limit: Int, nextToken: String): ModelActionConnection
+		@aws_api_key
+@aws_iam
+	listAutoActions(filter: ModelAutoActionFilterInput, limit: Int, nextToken: String): ModelAutoActionConnection
+		@aws_api_key
+@aws_iam
+	listCommunityBoardMemberships(filter: ModelCommunityBoardMembershipFilterInput, limit: Int, nextToken: String): ModelCommunityBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	listCommunityBoards(filter: ModelCommunityBoardFilterInput, limit: Int, nextToken: String): ModelCommunityBoardConnection
+		@aws_api_key
+@aws_iam
+	listConversations(filter: ModelConversationFilterInput, limit: Int, nextToken: String): ModelConversationConnection
+		@aws_api_key
+@aws_iam
+	listIssues(filter: ModelIssuesFilterInput, limit: Int, nextToken: String): ModelIssuesConnection
+		@aws_api_key
+@aws_iam
+	listKnowledgeBases(filter: ModelKnowledgeBaseFilterInput, limit: Int, nextToken: String): ModelKnowledgeBaseConnection
+		@aws_api_key
+@aws_iam
+	listMessages(filter: ModelMessageFilterInput, limit: Int, nextToken: String): ModelMessageConnection
+		@aws_api_key
+@aws_iam
+	listOrgs(filter: ModelOrgFilterInput, limit: Int, nextToken: String): ModelOrgConnection
+		@aws_api_key
+@aws_iam
+	listPremiumBoardMemberships(filter: ModelPremiumBoardMembershipFilterInput, limit: Int, nextToken: String): ModelPremiumBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	listPremiumBoards(filter: ModelPremiumBoardFilterInput, limit: Int, nextToken: String): ModelPremiumBoardConnection
+		@aws_api_key
+@aws_iam
+	listPrompts(filter: ModelPromptFilterInput, limit: Int, nextToken: String): ModelPromptConnection
+		@aws_api_key
+@aws_iam
+	listReviews(filter: ModelReviewFilterInput, limit: Int, nextToken: String): ModelReviewConnection
+		@aws_api_key
+@aws_iam
+	listSponsoredBoardMemberships(filter: ModelSponsoredBoardMembershipFilterInput, limit: Int, nextToken: String): ModelSponsoredBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	listSponsoredBoards(filter: ModelSponsoredBoardFilterInput, limit: Int, nextToken: String): ModelSponsoredBoardConnection
+		@aws_api_key
+@aws_iam
+	listUserGuides(filter: ModelUserGuideFilterInput, limit: Int, nextToken: String): ModelUserGuideConnection
+		@aws_api_key
+@aws_iam
+	listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+		@aws_api_key
+@aws_iam
+	messagesByConversationID(
+		conversationID: ID!,
+		filter: ModelMessageFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelMessageConnection
+		@aws_api_key
+@aws_iam
+	premiumBoardMembershipsByBoardID(
+		boardID: ID!,
+		filter: ModelPremiumBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelPremiumBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	premiumBoardMembershipsByUserID(
+		filter: ModelPremiumBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection,
+		userID: ID!
+	): ModelPremiumBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	premiumBoardsByOwner(
+		filter: ModelPremiumBoardFilterInput,
+		limit: Int,
+		nextToken: String,
+		owner: ID!,
+		sortDirection: ModelSortDirection
+	): ModelPremiumBoardConnection
+		@aws_api_key
+@aws_iam
+	reviewsByBoardID(
+		boardID: ID!,
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelReviewConnection
+		@aws_api_key
+@aws_iam
+	reviewsByParentReviewID(
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		parentReviewID: ID!,
+		sortDirection: ModelSortDirection
+	): ModelReviewConnection
+		@aws_api_key
+@aws_iam
+	reviewsByUserName(
+		filter: ModelReviewFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection,
+		userName: String!
+	): ModelReviewConnection
+		@aws_api_key
+@aws_iam
+	sponsoredBoardMembershipsByBoardID(
+		boardID: ID!,
+		filter: ModelSponsoredBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelSponsoredBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	sponsoredBoardMembershipsByUserID(
+		filter: ModelSponsoredBoardMembershipFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection,
+		userID: ID!
+	): ModelSponsoredBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	sponsoredBoardsByOwner(
+		filter: ModelSponsoredBoardFilterInput,
+		limit: Int,
+		nextToken: String,
+		owner: ID!,
+		sortDirection: ModelSortDirection
+	): ModelSponsoredBoardConnection
+		@aws_api_key
+@aws_iam
+	syncActionAssists(
+		filter: ModelActionAssistFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelActionAssistConnection
+		@aws_api_key
+@aws_iam
+	syncActionLists(
+		filter: ModelActionListFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelActionListConnection
+		@aws_api_key
+@aws_iam
+	syncActions(
+		filter: ModelActionFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelActionConnection
+		@aws_api_key
+@aws_iam
+	syncAutoActions(
+		filter: ModelAutoActionFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelAutoActionConnection
+		@aws_api_key
+@aws_iam
+	syncCommunityBoardMemberships(
+		filter: ModelCommunityBoardMembershipFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelCommunityBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	syncCommunityBoards(
+		filter: ModelCommunityBoardFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelCommunityBoardConnection
+		@aws_api_key
+@aws_iam
+	syncConversations(
+		filter: ModelConversationFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelConversationConnection
+		@aws_api_key
+@aws_iam
+	syncIssues(
+		filter: ModelIssuesFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelIssuesConnection
+		@aws_api_key
+@aws_iam
+	syncKnowledgeBases(
+		filter: ModelKnowledgeBaseFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelKnowledgeBaseConnection
+		@aws_api_key
+@aws_iam
+	syncMessages(
+		filter: ModelMessageFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelMessageConnection
+		@aws_api_key
+@aws_iam
+	syncOrgs(
+		filter: ModelOrgFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelOrgConnection
+		@aws_api_key
+@aws_iam
+	syncPremiumBoardMemberships(
+		filter: ModelPremiumBoardMembershipFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelPremiumBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	syncPremiumBoards(
+		filter: ModelPremiumBoardFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelPremiumBoardConnection
+		@aws_api_key
+@aws_iam
+	syncPrompts(
+		filter: ModelPromptFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelPromptConnection
+		@aws_api_key
+@aws_iam
+	syncReviews(
+		filter: ModelReviewFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelReviewConnection
+		@aws_api_key
+@aws_iam
+	syncSponsoredBoardMemberships(
+		filter: ModelSponsoredBoardMembershipFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelSponsoredBoardMembershipConnection
+		@aws_api_key
+@aws_iam
+	syncSponsoredBoards(
+		filter: ModelSponsoredBoardFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelSponsoredBoardConnection
+		@aws_api_key
+@aws_iam
+	syncUserGuides(
+		filter: ModelUserGuideFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelUserGuideConnection
+		@aws_api_key
+@aws_iam
+	syncUsers(
+		filter: ModelUserFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelUserConnection
+		@aws_api_key
+@aws_iam
+	usersByOrgID(
+		filter: ModelUserFilterInput,
+		limit: Int,
+		nextToken: String,
+		orgID: ID!,
+		sortDirection: ModelSortDirection
+	): ModelUserConnection
+		@aws_api_key
+@aws_iam
+	listBoardRoleDefinitions(filter: ModelBoardRoleDefinitionFilterInput, limit: Int, nextToken: String): ModelBoardRoleDefinitionConnection
+		@aws_api_key
+@aws_iam
+	getBoardRoleDefinition(id: ID!): BoardRoleDefinition
+		@aws_api_key
+@aws_iam
+	listAvailableRoles(
+		boardID: ID,
+		filter: ModelBoardRoleDefinitionFilterInput,
+		limit: Int,
+		nextToken: String
+	): ModelBoardRoleDefinitionConnection
+		@aws_api_key
+@aws_iam
+	getAutoActionPrompt(id: ID!): AutoActionPrompt
+		@aws_api_key
+@aws_iam
+	listAutoActionPrompts(filter: ModelAutoActionPromptFilterInput, limit: Int, nextToken: String): ModelAutoActionPromptConnection
+		@aws_api_key
+@aws_iam
+	autoActionPromptsByActionboardID(
+		actionboardID: ID!,
+		filter: ModelAutoActionPromptFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): ModelAutoActionPromptConnection
+		@aws_api_key
+@aws_iam
+	syncAutoActionPrompts(
+		filter: ModelAutoActionPromptFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelAutoActionPromptConnection
+		@aws_api_key
+@aws_iam
+	listActionGoals(filter: ModelActionGoalFilterInput, limit: Int, nextToken: String): ModelActionGoalConnection
+		@aws_api_key
+@aws_iam
+	getBoardUserActivity(id: ID!): BoardUserActivity
+		@aws_api_key
+@aws_iam
+	listBoardUserActivities(filter: TableBoardUserActivityFilterInput, limit: Int, nextToken: String): BoardUserActivityConnection
+		@aws_api_key
+@aws_iam
+	boardUserActivitiesByBoardID(
+		boardID: ID!,
+		filter: TableBoardUserActivityFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): [BoardUserActivity]
+		@aws_api_key
+@aws_iam
+	boardUserActivitiesByUserID(
+		userID: ID!,
+		filter: TableBoardUserActivityFilterInput,
+		limit: Int,
+		nextToken: String,
+		sortDirection: ModelSortDirection
+	): [BoardUserActivity]
+		@aws_api_key
+@aws_iam
+}
+
+type Subscription {
+	onCreateAction(filter: ModelSubscriptionActionFilterInput): Action
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createAction"])
+	onCreateActionAssist(filter: ModelSubscriptionActionAssistFilterInput): ActionAssist
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createActionAssist"])
+	onCreateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createActionList"])
+	onCreateAutoAction(filter: ModelSubscriptionAutoActionFilterInput): AutoAction
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createAutoAction"])
+	onCreateCommunityBoard(filter: ModelSubscriptionCommunityBoardFilterInput): CommunityBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createCommunityBoard"])
+	onCreateCommunityBoardMembership(filter: ModelSubscriptionCommunityBoardMembershipFilterInput): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createCommunityBoardMembership"])
+	onCreateConversation(filter: ModelSubscriptionConversationFilterInput): Conversation
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createConversation"])
+	onCreateIssues(filter: ModelSubscriptionIssuesFilterInput): Issues
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createIssues"])
+	onCreateKnowledgeBase(filter: ModelSubscriptionKnowledgeBaseFilterInput): KnowledgeBase
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createKnowledgeBase"])
+	onCreateMessage(filter: ModelSubscriptionMessageFilterInput): Message
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createMessage"])
+	onCreateOrg(filter: ModelSubscriptionOrgFilterInput): Org
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createOrg"])
+	onCreatePremiumBoard(filter: ModelSubscriptionPremiumBoardFilterInput): PremiumBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createPremiumBoard"])
+	onCreatePremiumBoardMembership(filter: ModelSubscriptionPremiumBoardMembershipFilterInput): PremiumBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createPremiumBoardMembership"])
+	onCreatePrompt(filter: ModelSubscriptionPromptFilterInput): Prompt
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createPrompt"])
+	onCreateReview(filter: ModelSubscriptionReviewFilterInput): Review
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createReview"])
+	onCreateSponsoredBoard(filter: ModelSubscriptionSponsoredBoardFilterInput): SponsoredBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createSponsoredBoard"])
+	onCreateSponsoredBoardMembership(filter: ModelSubscriptionSponsoredBoardMembershipFilterInput): SponsoredBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createSponsoredBoardMembership"])
+	onCreateUser(filter: ModelSubscriptionUserFilterInput): User
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createUser"])
+	onCreateUserGuide(filter: ModelSubscriptionUserGuideFilterInput): UserGuide
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createUserGuide"])
+	onDeleteAction(filter: ModelSubscriptionActionFilterInput): Action
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteAction"])
+	onDeleteActionAssist(filter: ModelSubscriptionActionAssistFilterInput): ActionAssist
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteActionAssist"])
+	onDeleteActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteActionList"])
+	onDeleteAutoAction(filter: ModelSubscriptionAutoActionFilterInput): AutoAction
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteAutoAction"])
+	onDeleteCommunityBoard(filter: ModelSubscriptionCommunityBoardFilterInput): CommunityBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteCommunityBoard"])
+	onDeleteCommunityBoardMembership(filter: ModelSubscriptionCommunityBoardMembershipFilterInput): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteCommunityBoardMembership"])
+	onDeleteConversation(filter: ModelSubscriptionConversationFilterInput): Conversation
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteConversation"])
+	onDeleteIssues(filter: ModelSubscriptionIssuesFilterInput): Issues
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteIssues"])
+	onDeleteKnowledgeBase(filter: ModelSubscriptionKnowledgeBaseFilterInput): KnowledgeBase
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteKnowledgeBase"])
+	onDeleteMessage(filter: ModelSubscriptionMessageFilterInput): Message
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteMessage"])
+	onDeleteOrg(filter: ModelSubscriptionOrgFilterInput): Org
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteOrg"])
+	onDeletePremiumBoard(filter: ModelSubscriptionPremiumBoardFilterInput): PremiumBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deletePremiumBoard"])
+	onDeletePremiumBoardMembership(filter: ModelSubscriptionPremiumBoardMembershipFilterInput): PremiumBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deletePremiumBoardMembership"])
+	onDeletePrompt(filter: ModelSubscriptionPromptFilterInput): Prompt
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deletePrompt"])
+	onDeleteReview(filter: ModelSubscriptionReviewFilterInput): Review
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteReview"])
+	onDeleteSponsoredBoard(filter: ModelSubscriptionSponsoredBoardFilterInput): SponsoredBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteSponsoredBoard"])
+	onDeleteSponsoredBoardMembership(filter: ModelSubscriptionSponsoredBoardMembershipFilterInput): SponsoredBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteSponsoredBoardMembership"])
+	onDeleteUser(filter: ModelSubscriptionUserFilterInput): User
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteUser"])
+	onDeleteUserGuide(filter: ModelSubscriptionUserGuideFilterInput): UserGuide
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteUserGuide"])
+	onUpdateAction(filter: ModelSubscriptionActionFilterInput): Action
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateAction"])
+	onUpdateActionAssist(filter: ModelSubscriptionActionAssistFilterInput): ActionAssist
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateActionAssist"])
+	onUpdateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateActionList"])
+	onUpdateAutoAction(filter: ModelSubscriptionAutoActionFilterInput): AutoAction
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateAutoAction"])
+	onUpdateCommunityBoard(filter: ModelSubscriptionCommunityBoardFilterInput): CommunityBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateCommunityBoard"])
+	onUpdateCommunityBoardMembership(filter: ModelSubscriptionCommunityBoardMembershipFilterInput): CommunityBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateCommunityBoardMembership"])
+	onUpdateConversation(filter: ModelSubscriptionConversationFilterInput): Conversation
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateConversation"])
+	onUpdateIssues(filter: ModelSubscriptionIssuesFilterInput): Issues
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateIssues"])
+	onUpdateKnowledgeBase(filter: ModelSubscriptionKnowledgeBaseFilterInput): KnowledgeBase
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateKnowledgeBase"])
+	onUpdateMessage(filter: ModelSubscriptionMessageFilterInput): Message
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateMessage"])
+	onUpdateOrg(filter: ModelSubscriptionOrgFilterInput): Org
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateOrg"])
+	onUpdatePremiumBoard(filter: ModelSubscriptionPremiumBoardFilterInput): PremiumBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updatePremiumBoard"])
+	onUpdatePremiumBoardMembership(filter: ModelSubscriptionPremiumBoardMembershipFilterInput): PremiumBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updatePremiumBoardMembership"])
+	onUpdatePrompt(filter: ModelSubscriptionPromptFilterInput): Prompt
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updatePrompt"])
+	onUpdateReview(filter: ModelSubscriptionReviewFilterInput): Review
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateReview"])
+	onUpdateSponsoredBoard(filter: ModelSubscriptionSponsoredBoardFilterInput): SponsoredBoard
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateSponsoredBoard"])
+	onUpdateSponsoredBoardMembership(filter: ModelSubscriptionSponsoredBoardMembershipFilterInput): SponsoredBoardMembership
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateSponsoredBoardMembership"])
+	onUpdateUser(filter: ModelSubscriptionUserFilterInput): User
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateUser"])
+	onUpdateUserGuide(filter: ModelSubscriptionUserGuideFilterInput): UserGuide
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateUserGuide"])
+	onCreateAutoActionPrompt(filter: ModelSubscriptionAutoActionPromptFilterInput): AutoActionPrompt
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createAutoActionPrompt"])
+	onUpdateAutoActionPrompt(filter: ModelSubscriptionAutoActionPromptFilterInput): AutoActionPrompt
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateAutoActionPrompt"])
+	onDeleteAutoActionPrompt(filter: ModelSubscriptionAutoActionPromptFilterInput): AutoActionPrompt
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteAutoActionPrompt"])
+	onCreateBoardUserActivity(
+		id: ID,
+		userID: ID,
+		boardID: ID,
+		activityType: ActivityType,
+		activityDetail: AWSJSON
+	): BoardUserActivity
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["createBoardUserActivity"])
+	onUpdateBoardUserActivity(
+		id: ID,
+		userID: ID,
+		boardID: ID,
+		activityType: ActivityType,
+		activityDetail: AWSJSON
+	): BoardUserActivity
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["updateBoardUserActivity"])
+	onDeleteBoardUserActivity(
+		id: ID,
+		userID: ID,
+		boardID: ID,
+		activityType: ActivityType,
+		activityDetail: AWSJSON
+	): BoardUserActivity
+		@aws_api_key
+@aws_iam
+@aws_subscribe(mutations: ["deleteBoardUserActivity"])
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+	subscription: Subscription
+}

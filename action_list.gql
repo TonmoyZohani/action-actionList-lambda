@@ -1,0 +1,174 @@
+type Action @aws_api_key @aws_iam {
+  Accepted: Boolean
+  ActionItem: String
+  ActionStatus: Status
+  Conversations: ModelConversationConnection
+  Delegate: Boolean
+  Due_date: AWSDateTime
+  Encrypt: Boolean
+  GuardRails: AWSJSON
+  History: AWSJSON
+  Ignore: Boolean
+  FileUrls: [String]
+  KBLink: [String]
+  Notes: [String]
+  Notify: String
+  orderRank: Int
+  Owner: String
+  Type: String
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp
+  _version: Int
+  actionlistID: ID!
+  createdAt: AWSDateTime!
+  id: ID!
+  isImportant: Boolean
+  isUrgent: Boolean
+  knowledgeBaseID: ID
+  prompt: String
+  tags: [String]
+  updatedAt: AWSDateTime!
+  userLike: Int
+  assignedUserInfo: ActionListTransferUserInfo
+  assignedByUserInfo: ActionListTransferUserInfo
+}
+
+type ActionList @aws_api_key @aws_iam {
+  Context: String
+  Delegate: Boolean
+  DueDate: AWSDateTime
+  Ignore: Boolean
+  Tags: [String]
+  orderRank: Int
+  _deleted: Boolean
+  _lastChangedAt: AWSTimestamp
+  _version: Int
+  action: String
+  actionItems: ModelActionConnection
+  actionListStatus: Status
+  actionboardID: ID
+  createdAt: AWSDateTime!
+  id: ID!
+  isImportant: Boolean
+  isUrgent: Boolean
+  knowledgeBaseID: ID
+  notes: String
+  savedBy: String
+  updatedAt: AWSDateTime!
+  metadata: ActionListMetaData
+  transferInfo: TransferInfo
+  assignedUserInfo: ActionListTransferUserInfo
+  assignedByUserInfo: ActionListTransferUserInfo
+}
+
+type ActionListMetaData {
+  mainBoardId: ID
+  newBoardId: ID
+}
+
+type ActionListTransferUserInfo {
+  id: ID!
+  name: String
+  email: String!
+  avatar: String
+}
+
+type TransferInfo {
+  transferStatus: TransferStatus
+  transferRequestByUserInfo: ActionListTransferUserInfo
+  transferAcceptByUserInfo: ActionListTransferUserInfo
+  transferRejectByUserInfo: ActionListTransferUserInfo
+  transferRequestTime: AWSDateTime
+  transferAcceptTime: AWSDateTime
+  transferRejectTime: AWSDateTime
+}
+
+enum ActionListOrItemType {
+  ACTION_LIST
+  ACTION_ITEM
+}
+
+enum TransferStatus {
+  REQUESTED
+  ACCEPTED
+  REJECTED
+}
+
+getAction(id: ID!): Action
+getAction_test(id: ID!): Action
+getActionByActionlistID_test(actionlistID: ID!): [Action]
+actionsByActionlistID(actionlistID: ID!, ...): ModelActionConnection
+actionsByKnowledgeBaseID(knowledgeBaseID: ID!, ...): ModelActionConnection
+listActions(filter: ModelActionFilterInput, ...): ModelActionConnection
+syncActions(filter: ModelActionFilterInput, ...): ModelActionConnection
+
+getActionList(id: ID!): ActionList
+getSharedActionlistByBoardId(boardId: ID!): ActionListResponse
+actionListsByActionboardID(actionboardID: ID!, ...): ModelActionListConnection
+actionListsByKnowledgeBaseID(knowledgeBaseID: ID!, ...): ModelActionListConnection
+actionListsBySavedBy(savedBy: String!, ...): ModelActionListConnection
+listActionLists(filter: ModelActionListFilterInput, ...): ModelActionListConnection
+syncActionLists(filter: ModelActionListFilterInput, ...): ModelActionListConnection
+
+createAction(input: CreateActionInput!): Action
+updateAction(input: UpdateActionInput!): Action
+deleteAction(id: ID!): Action
+deleteAction_test(actionId: ID!): Boolean
+deleteActionsByActionListID(id: ID!): Boolean
+deleteActionsByActionListID_test(id: ID!): Boolean
+
+createActionList(input: CreateActionListInput!): ActionList
+updateActionList(input: UpdateActionListInput!): ActionList
+deleteActionList(id: ID!): ActionList
+deleteActionListWithItems(id: ID!): Boolean
+
+transferActionListRequest(input: ActionListTransferInput): SimpleResponse
+acceptTransferActionListRequest(input: ActionListTransferAcceptRejectInput): SimpleResponse
+rejectTransferActionListRequest(input: ActionListTransferAcceptRejectInput): SimpleResponse
+assignUserInActionListOrItem(input: AssignUserInActionListOrItemInput): SimpleResponse
+
+input CreateActionInput {
+  # ... all Action fields
+  actionlistID: ID!
+}
+
+input UpdateActionInput {
+  # ... all Action fields
+  id: ID!
+}
+
+input DeleteActionInput {
+  id: ID!
+}
+
+input CreateActionListInput {
+  # ... all ActionList fields
+}
+
+input UpdateActionListInput {
+  # ... all ActionList fields
+  id: ID!
+}
+
+input DeleteActionListInput {
+  id: ID!
+}
+
+input ActionListTransferInput {
+  actionListId: ID!
+  userId: ID!
+  newBoardId: ID!
+}
+
+input ActionListTransferAcceptRejectInput {
+  actionListId: ID!
+  userId: ID!
+}
+
+input AssignUserInActionListOrItemInput {
+  actionLisOrItemId: ID!
+  assignedUserId: ID!
+  assignedByUserId: ID!
+  type: ActionListOrItemType!
+}
+

@@ -1,0 +1,68 @@
+type Query {
+  listActions(
+    filter: ActionFilterInput
+    sort: ActionSortInput
+    pagination: PaginationInput
+  ): ActionListConnection
+}
+
+input ActionFilterInput {
+  searchTerm: String
+  actionboardID: ID
+  actionListStatus: ActionStatus
+  isImportant: Boolean
+  isUrgent: Boolean
+  tags: [String!]
+  createdAfter: AWSDateTime
+  createdBefore: AWSDateTime
+}
+
+input ActionSortInput {
+  field: ActionSortField!
+  direction: SortDirection = DESC
+}
+
+enum ActionSortField {
+  createdAt
+  updatedAt
+  action
+  actionListStatus
+}
+
+enum SortDirection {
+  ASC
+  DESC
+}
+
+input PaginationInput {
+  limit: Int
+  nextToken: String
+}
+
+type ActionListConnection {
+  items: [ActionList!]!
+  nextToken: String
+  totalCount: Int
+}
+
+type ActionList {
+  id: ID!
+  action: String!
+  actionboardID: ID!
+  actionListStatus: ActionStatus!
+  context: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+  delegate: Boolean
+  ignore: Boolean
+  isImportant: Boolean
+  isUrgent: Boolean
+  tags: [String!]
+}
+
+enum ActionStatus {
+  New
+  InProgress
+  Completed
+  Cancelled
+}

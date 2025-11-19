@@ -14,13 +14,6 @@ type Query {
     nextToken: String
     sortDirection: ModelSortDirection
   ): ModelActionConnection
-  actionsByKnowledgeBaseID(
-    knowledgeBaseID: ID!
-    filter: ModelActionFilterInput
-    limit: Int
-    nextToken: String
-    sortDirection: ModelSortDirection
-  ): ModelActionConnection
   listActions(filter: ModelActionFilterInput, limit: Int, nextToken: String): ModelActionConnection
   syncActions(filter: ModelActionFilterInput, lastSync: AWSTimestamp, limit: Int, nextToken: String): ModelActionConnection
 
@@ -28,13 +21,6 @@ type Query {
   getActionList(id: ID!): ActionList
   actionListsByActionboardID(
     actionboardID: ID!
-    filter: ModelActionListFilterInput
-    limit: Int
-    nextToken: String
-    sortDirection: ModelSortDirection
-  ): ModelActionListConnection
-  actionListsByKnowledgeBaseID(
-    knowledgeBaseID: ID!
     filter: ModelActionListFilterInput
     limit: Int
     nextToken: String
@@ -49,7 +35,6 @@ type Mutation {
   createAction(input: CreateActionInput!): Action
   updateAction(input: UpdateActionInput!): Action
   deleteAction(id: ID!): Action
-  deleteAction_test(actionId: ID!): Boolean
   deleteActionsByActionListID(id: ID!): Boolean
   deleteActionsByActionListID_test(id: ID!): Boolean
 

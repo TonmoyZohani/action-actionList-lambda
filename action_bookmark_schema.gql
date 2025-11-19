@@ -1,0 +1,151 @@
+type ActionListBookmark {
+	id: ID!
+	boardId: String!
+	actionlistId: String!
+	userId: String!
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+type ActionListBookmarkConnection {
+	items: [ActionListBookmark]
+	nextToken: String
+}
+
+input CreateActionListBookmarkInput {
+	boardId: String!
+	actionlistId: String!
+	userId: String!
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+input DeleteActionListBookmarkInput {
+	id: ID!
+}
+
+input ModelSizeInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+}
+
+input TableActionListBookmarkFilterInput {
+	id: TableIDFilterInput
+	boardId: TableStringFilterInput
+	actionlistId: TableStringFilterInput
+	userId: TableStringFilterInput
+	createdAt: TableStringFilterInput
+	updatedAt: TableStringFilterInput
+}
+
+input TableBooleanFilterInput {
+	ne: Boolean
+	eq: Boolean
+	attributeExists: Boolean
+}
+
+input TableFloatFilterInput {
+	ne: Float
+	eq: Float
+	le: Float
+	lt: Float
+	ge: Float
+	gt: Float
+	between: [Float]
+	attributeExists: Boolean
+}
+
+input TableIDFilterInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	attributeExists: Boolean
+	size: ModelSizeInput
+}
+
+input TableIntFilterInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+	attributeExists: Boolean
+}
+
+input TableStringFilterInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+	attributeExists: Boolean
+	size: ModelSizeInput
+}
+
+input UpdateActionListBookmarkInput {
+	id: ID!
+	boardId: String
+	actionlistId: String
+	userId: String
+	createdAt: AWSDateTime
+	updatedAt: AWSDateTime
+}
+
+type Mutation {
+	createActionListBookmark(input: CreateActionListBookmarkInput!): ActionListBookmark
+	updateActionListBookmark(input: UpdateActionListBookmarkInput!): ActionListBookmark
+	deleteActionListBookmark(input: DeleteActionListBookmarkInput!): ActionListBookmark
+}
+
+type Query {
+	getActionListBookmark(id: ID!): ActionListBookmark
+	listActionListBookmarks(filter: TableActionListBookmarkFilterInput, limit: Int, nextToken: String): ActionListBookmarkConnection
+	queryActionListBookmarksByBoardIdIndex(boardId: String!, first: Int, after: String): ActionListBookmarkConnection
+	queryActionListBookmarksByUserIdIndex(userId: String!, first: Int, after: String): ActionListBookmarkConnection
+}
+
+type Subscription {
+	onCreateActionListBookmark(
+		id: ID,
+		boardId: String,
+		actionlistId: String,
+		userId: String,
+		createdAt: AWSDateTime
+	): ActionListBookmark
+		@aws_subscribe(mutations: ["createActionListBookmark"])
+	onUpdateActionListBookmark(
+		id: ID,
+		boardId: String,
+		actionlistId: String,
+		userId: String,
+		createdAt: AWSDateTime
+	): ActionListBookmark
+		@aws_subscribe(mutations: ["updateActionListBookmark"])
+	onDeleteActionListBookmark(
+		id: ID,
+		boardId: String,
+		actionlistId: String,
+		userId: String,
+		createdAt: AWSDateTime
+	): ActionListBookmark
+		@aws_subscribe(mutations: ["deleteActionListBookmark"])
+}

@@ -1,0 +1,808 @@
+# ==================== MAIN TYPES ====================
+type Action @model
+@aws_api_key
+@aws_iam {
+	# Core Identifiers
+	id: ID!
+	actionlistID: ID!
+	knowledgeBaseID: ID
+	# Core Content
+	ActionItem: String
+	ActionStatus: Status
+	prompt: String
+	Type: String
+	Owner: String
+	Notify: String
+	# Status Flags
+	Accepted: Boolean
+	Delegate: Boolean
+	Ignore: Boolean
+	Encrypt: Boolean
+	isImportant: Boolean
+	isUrgent: Boolean
+	# Dates & Ranking
+	Due_date: AWSDateTime
+	orderRank: Int
+	# Content & Attachments
+	Notes: [String]
+	FileUrls: [String]
+	KBLink: [String]
+	tags: [String]
+	GuardRails: AWSJSON
+	History: AWSJSON
+	userLike: Int
+	# Relations
+	Conversations: ModelConversationConnection
+		@connection(keyName: "byAction",fields: ["id"])
+	# Assignment
+	assignedUserInfo: ActionListTransferUserInfo
+	assignedByUserInfo: ActionListTransferUserInfo
+	# System Fields
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime
+	_version: Int
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp
+}
+
+input ActionFilterInput {
+	actionboardID: ID
+	actionListStatus: String
+	isImportant: Boolean
+	isUrgent: Boolean
+	tags: [String!]
+	createdAfter: AWSDateTime
+	createdBefore: AWSDateTime
+	delegate: Boolean
+	ignore: Boolean
+}
+
+type ActionList @model
+@aws_api_key
+@aws_iam {
+	# Core Identifiers
+	id: ID!
+	actionboardID: ID
+	knowledgeBaseID: ID
+	# Core Content
+	action: String
+	Context: String
+	notes: String
+	actionListStatus: Status
+	# Status Flags
+	Delegate: Boolean
+	Ignore: Boolean
+	isImportant: Boolean
+	isUrgent: Boolean
+	# Dates & Ranking
+	DueDate: AWSDateTime
+	orderRank: Int
+	# Metadata
+	Tags: [String]
+	savedBy: String
+	metadata: ActionListMetaData
+	transferInfo: TransferInfo
+	# Assignment
+	assignedUserInfo: ActionListTransferUserInfo
+	assignedByUserInfo: ActionListTransferUserInfo
+	# Relations
+	actionItems: ModelActionConnection
+		@connection(keyName: "byActionList",fields: ["id"])
+	# System Fields
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime
+	_version: Int
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp
+}
+
+# Bookmark Types
+type ActionListBookmark {
+	id: ID!
+	boardId: String!
+	actionlistId: String!
+	userId: String!
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+type ActionListBookmarkConnection {
+	items: [ActionListBookmark]
+	nextToken: String
+}
+
+type ActionListConnection {
+	items: [ActionList!]!
+	nextToken: String
+	totalCount: Int!
+}
+
+type ActionListMetaData {
+	mainBoardId: ID
+	newBoardId: ID
+}
+
+enum ActionListOrItemType {
+	ACTION_LIST
+	ACTION_ITEM
+}
+
+input ActionListTransferAcceptRejectInput {
+	actionListId: ID!
+	userId: ID!
+}
+
+# Special Operation Inputs
+input ActionListTransferInput {
+	actionListId: ID!
+	userId: ID!
+	newBoardId: ID!
+}
+
+# Transfer & Assignment Types
+type ActionListTransferUserInfo {
+	id: ID!
+	name: String
+	email: String!
+	avatar: String
+}
+
+enum ActionSortField {
+	CREATED_AT
+	UPDATED_AT
+	ACTION
+	ACTION_LIST_STATUS
+}
+
+input ActionSortInput {
+	field: ActionSortField!
+	direction: SortDirection!
+}
+
+input AssignUserInActionListOrItemInput {
+	actionListOrItemId: ID!
+	assignedUserId: ID!
+	assignedByUserId: ID!
+	type: ActionListOrItemType!
+}
+
+# Conversation Types
+type Conversation @model
+@aws_api_key
+@aws_iam {
+	id: ID!
+	actionID: ID
+	actionboardID: ID!
+	DateTime: AWSDateTime
+	encrypt: Boolean
+	msg: ModelMessageConnection
+		@connection(keyName: "byConversation",fields: ["id"])
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+	_version: Int
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp
+}
+
+# ==================== INPUT TYPES ====================
+# Action Inputs
+input CreateActionInput {
+	# Required Fields
+	actionlistID: ID!
+	# Core Properties
+	ActionItem: String
+	ActionStatus: Status
+	prompt: String
+	Type: String
+	orderRank: Int
+	# Optional Fields
+	id: ID
+	knowledgeBaseID: ID
+	tags: [String]
+	isImportant: Boolean
+	isUrgent: Boolean
+	Accepted: Boolean
+	Delegate: Boolean
+	Ignore: Boolean
+	Encrypt: Boolean
+	Due_date: AWSDateTime
+	Notes: [String]
+	FileUrls: [String]
+	KBLink: [String]
+	GuardRails: AWSJSON
+	History: AWSJSON
+	userLike: Int
+	Notify: String
+	Owner: String
+	_version: Int
+}
+
+# Bookmark Inputs
+input CreateActionListBookmarkInput {
+	boardId: String!
+	actionlistId: String!
+	userId: String!
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+# ActionList Inputs
+input CreateActionListInput {
+	# Core Properties
+	action: String
+	actionListStatus: Status
+	orderRank: Int
+	# Optional Fields
+	id: ID
+	actionboardID: ID
+	knowledgeBaseID: ID
+	savedBy: String
+	Tags: [String]
+	Context: String
+	notes: String
+	isImportant: Boolean
+	isUrgent: Boolean
+	Delegate: Boolean
+	Ignore: Boolean
+	DueDate: AWSDateTime
+	_version: Int
+}
+
+input DeleteActionListBookmarkInput {
+	id: ID!
+}
+
+# Advanced List Query Inputs
+input ListActionsInput {
+	filter: ActionFilterInput
+	search: SearchInput
+	sort: ActionSortInput
+	pagination: PaginationInput
+}
+
+type ListActionsResponse {
+	success: Boolean!
+	message: String!
+	data: ActionListConnection
+	error: String
+}
+
+type Message @model
+@aws_api_key
+@aws_iam {
+	id: ID!
+	conversationID: ID!
+	content: String
+	role: String
+	timeStamp: AWSDateTime
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+	_version: Int
+	_deleted: Boolean
+	_lastChangedAt: AWSTimestamp
+}
+
+# ==================== SUPPORTING TYPES ====================
+# Connection Types
+type ModelActionConnection {
+	items: [Action!]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+# ==================== FILTER INPUTS ====================
+# Model Filter Inputs
+input ModelActionFilterInput {
+	id: ModelIDInput
+	actionlistID: ModelIDInput
+	knowledgeBaseID: ModelIDInput
+	ActionItem: ModelStringInput
+	ActionStatus: ModelStatusInput
+	prompt: ModelStringInput
+	Type: ModelStringInput
+	Owner: ModelStringInput
+	Notify: ModelStringInput
+	Accepted: ModelBooleanInput
+	Delegate: ModelBooleanInput
+	Ignore: ModelBooleanInput
+	Encrypt: ModelBooleanInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	Due_date: ModelStringInput
+	orderRank: ModelIntInput
+	Notes: ModelStringInput
+	FileUrls: ModelStringInput
+	KBLink: ModelStringInput
+	tags: ModelStringInput
+	GuardRails: ModelStringInput
+	History: ModelStringInput
+	userLike: ModelIntInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+	_deleted: ModelBooleanInput
+	and: [ModelActionFilterInput]
+	or: [ModelActionFilterInput]
+	not: ModelActionFilterInput
+}
+
+type ModelActionListConnection {
+	items: [ActionList!]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelActionListFilterInput {
+	id: ModelIDInput
+	actionboardID: ModelIDInput
+	knowledgeBaseID: ModelIDInput
+	action: ModelStringInput
+	Context: ModelStringInput
+	notes: ModelStringInput
+	actionListStatus: ModelStatusInput
+	Delegate: ModelBooleanInput
+	Ignore: ModelBooleanInput
+	isImportant: ModelBooleanInput
+	isUrgent: ModelBooleanInput
+	DueDate: ModelStringInput
+	orderRank: ModelIntInput
+	Tags: ModelStringInput
+	savedBy: ModelStringInput
+	createdAt: ModelStringInput
+	updatedAt: ModelStringInput
+	_deleted: ModelBooleanInput
+	and: [ModelActionListFilterInput]
+	or: [ModelActionListFilterInput]
+	not: ModelActionListFilterInput
+}
+
+enum ModelAttributeTypes {
+	binary
+	binarySet
+	bool
+	list
+	map
+	number
+	numberSet
+	string
+	stringSet
+	_null
+}
+
+input ModelBooleanInput {
+	ne: Boolean
+	eq: Boolean
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+}
+
+type ModelConversationConnection {
+	items: [Conversation!]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelIDInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	size: ModelSizeInput
+}
+
+input ModelIntInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+}
+
+type ModelMessageConnection {
+	items: [Message!]!
+	nextToken: String
+	startedAt: AWSTimestamp
+}
+
+input ModelSizeInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+}
+
+enum ModelSortDirection {
+	ASC
+	DESC
+}
+
+input ModelStatusInput {
+	eq: Status
+	ne: Status
+}
+
+# Generic Filter Inputs
+input ModelStringInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+	attributeExists: Boolean
+	attributeType: ModelAttributeTypes
+	size: ModelSizeInput
+}
+
+# ==================== SUBSCRIPTION FILTERS ====================
+input ModelSubscriptionActionFilterInput {
+	id: ModelSubscriptionIDInput
+	actionlistID: ModelSubscriptionIDInput
+	knowledgeBaseID: ModelSubscriptionIDInput
+	ActionItem: ModelSubscriptionStringInput
+	ActionStatus: ModelSubscriptionStringInput
+	prompt: ModelSubscriptionStringInput
+	Type: ModelSubscriptionStringInput
+	Owner: ModelSubscriptionStringInput
+	Notify: ModelSubscriptionStringInput
+	Accepted: ModelSubscriptionBooleanInput
+	Delegate: ModelSubscriptionBooleanInput
+	Ignore: ModelSubscriptionBooleanInput
+	Encrypt: ModelSubscriptionBooleanInput
+	isImportant: ModelSubscriptionBooleanInput
+	isUrgent: ModelSubscriptionBooleanInput
+	Due_date: ModelSubscriptionStringInput
+	Notes: ModelSubscriptionStringInput
+	FileUrls: ModelSubscriptionStringInput
+	KBLink: ModelSubscriptionStringInput
+	tags: ModelSubscriptionStringInput
+	GuardRails: ModelSubscriptionStringInput
+	History: ModelSubscriptionStringInput
+	userLike: ModelSubscriptionIntInput
+	createdAt: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionActionFilterInput]
+	or: [ModelSubscriptionActionFilterInput]
+}
+
+input ModelSubscriptionActionListFilterInput {
+	id: ModelSubscriptionIDInput
+	actionboardID: ModelSubscriptionIDInput
+	knowledgeBaseID: ModelSubscriptionIDInput
+	action: ModelSubscriptionStringInput
+	Context: ModelSubscriptionStringInput
+	notes: ModelSubscriptionStringInput
+	actionListStatus: ModelSubscriptionStringInput
+	Delegate: ModelSubscriptionBooleanInput
+	Ignore: ModelSubscriptionBooleanInput
+	isImportant: ModelSubscriptionBooleanInput
+	isUrgent: ModelSubscriptionBooleanInput
+	DueDate: ModelSubscriptionStringInput
+	Tags: ModelSubscriptionStringInput
+	savedBy: ModelSubscriptionStringInput
+	createdAt: ModelSubscriptionStringInput
+	updatedAt: ModelSubscriptionStringInput
+	_deleted: ModelBooleanInput
+	and: [ModelSubscriptionActionListFilterInput]
+	or: [ModelSubscriptionActionListFilterInput]
+}
+
+input ModelSubscriptionBooleanInput {
+	ne: Boolean
+	eq: Boolean
+}
+
+input ModelSubscriptionIDInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	in: [ID]
+	notIn: [ID]
+}
+
+input ModelSubscriptionIntInput {
+	ne: Int
+	eq: Int
+	le: Int
+	lt: Int
+	ge: Int
+	gt: Int
+	between: [Int]
+	in: [Int]
+	notIn: [Int]
+}
+
+# Subscription Generic Inputs
+input ModelSubscriptionStringInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+	in: [String]
+	notIn: [String]
+}
+
+input PaginationInput {
+	limit: Int
+	nextToken: String
+}
+
+enum SearchField {
+	ACTION
+	CONTEXT
+	TAGS
+	ALL
+}
+
+input SearchInput {
+	term: String!
+	fields: [SearchField!]
+}
+
+# Response Types
+type SimpleResponse {
+	success: Boolean!
+	message: String!
+}
+
+enum SortDirection {
+	ASC
+	DESC
+}
+
+# ==================== ENUMERATIONS ====================
+enum Status {
+	Active
+	Done
+	In_Progress
+	New
+	Todo
+	AutoActionAiAgent
+	ActionAssistAgent
+}
+
+input TableActionListBookmarkFilterInput {
+	id: TableIDFilterInput
+	boardId: TableStringFilterInput
+	actionlistId: TableStringFilterInput
+	userId: TableStringFilterInput
+	createdAt: TableStringFilterInput
+	updatedAt: TableStringFilterInput
+}
+
+# Table Filter Inputs
+input TableIDFilterInput {
+	ne: ID
+	eq: ID
+	le: ID
+	lt: ID
+	ge: ID
+	gt: ID
+	contains: ID
+	notContains: ID
+	between: [ID]
+	beginsWith: ID
+	attributeExists: Boolean
+	size: ModelSizeInput
+}
+
+input TableStringFilterInput {
+	ne: String
+	eq: String
+	le: String
+	lt: String
+	ge: String
+	gt: String
+	contains: String
+	notContains: String
+	between: [String]
+	beginsWith: String
+	attributeExists: Boolean
+	size: ModelSizeInput
+}
+
+type TransferInfo {
+	transferStatus: TransferStatus
+	transferRequestByUserInfo: ActionListTransferUserInfo
+	transferAcceptByUserInfo: ActionListTransferUserInfo
+	transferRejectByUserInfo: ActionListTransferUserInfo
+	transferRequestTime: AWSDateTime
+	transferAcceptTime: AWSDateTime
+	transferRejectTime: AWSDateTime
+}
+
+enum TransferStatus {
+	REQUESTED
+	ACCEPTED
+	REJECTED
+}
+
+input UpdateActionInput {
+	# Required Fields
+	id: ID!
+	# Core Properties
+	ActionItem: String
+	ActionStatus: Status
+	prompt: String
+	Type: String
+	orderRank: Int
+	# Optional Fields
+	actionlistID: ID
+	knowledgeBaseID: ID
+	tags: [String]
+	isImportant: Boolean
+	isUrgent: Boolean
+	Accepted: Boolean
+	Delegate: Boolean
+	Ignore: Boolean
+	Encrypt: Boolean
+	Due_date: AWSDateTime
+	Notes: [String]
+	FileUrls: [String]
+	KBLink: [String]
+	GuardRails: AWSJSON
+	History: AWSJSON
+	userLike: Int
+	Notify: String
+	Owner: String
+	_version: Int
+}
+
+input UpdateActionListInput {
+	# Required Fields
+	id: ID!
+	# Core Properties
+	action: String
+	actionListStatus: Status
+	orderRank: Int
+	# Optional Fields
+	actionboardID: ID
+	knowledgeBaseID: ID
+	savedBy: String
+	Tags: [String]
+	Context: String
+	notes: String
+	isImportant: Boolean
+	isUrgent: Boolean
+	Delegate: Boolean
+	Ignore: Boolean
+	DueDate: AWSDateTime
+	_version: Int
+}
+
+type Mutation {
+	# Actions
+	createAction(input: CreateActionInput!): Action
+	updateAction(input: UpdateActionInput!): Action
+	deleteAction(id: ID!): Action
+	deleteAction_test(actionId: ID!): Boolean
+	deleteActionsByActionListID(id: ID!): Boolean
+	deleteActionsByActionListID_test(id: ID!): Boolean
+	# ActionLists
+	createActionList(input: CreateActionListInput!): ActionList
+	updateActionList(input: UpdateActionListInput!): ActionList
+	deleteActionList(id: ID!): ActionList
+	deleteActionListWithItems(id: ID!): Boolean
+	# Transfer & Assignment
+	transferActionListRequest(input: ActionListTransferInput!): SimpleResponse
+	acceptTransferActionListRequest(input: ActionListTransferAcceptRejectInput!): SimpleResponse
+	rejectTransferActionListRequest(input: ActionListTransferAcceptRejectInput!): SimpleResponse
+	assignUserInActionListOrItem(input: AssignUserInActionListOrItemInput!): SimpleResponse
+	# Bookmarks
+	createActionListBookmark(input: CreateActionListBookmarkInput!): ActionListBookmark
+	deleteActionListBookmark(input: DeleteActionListBookmarkInput!): Boolean
+}
+
+# ==================== ROOT TYPES ====================
+type Query {
+	# Actions
+	getAction(id: ID!): Action
+	getAction_test(id: ID!): Action
+	getActionByActionlistID_test(actionlistID: ID!): [Action]
+	actionsByActionlistID(
+		actionlistID: ID!,
+		filter: ModelActionFilterInput,
+		sortDirection: ModelSortDirection,
+		limit: Int,
+		nextToken: String
+	): ModelActionConnection
+	actionsByKnowledgeBaseID(
+		knowledgeBaseID: ID!,
+		filter: ModelActionFilterInput,
+		sortDirection: ModelSortDirection,
+		limit: Int,
+		nextToken: String
+	): ModelActionConnection
+	#   listActions(
+	#     filter: ModelActionFilterInput
+	#     limit: Int
+	#     nextToken: String
+	#   ): ModelActionConnection
+	syncActions(
+		filter: ModelActionFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelActionConnection
+	# ActionLists
+	getActionList(id: ID!): ActionList
+	actionListsByActionboardID(
+		actionboardID: ID!,
+		filter: ModelActionListFilterInput,
+		sortDirection: ModelSortDirection,
+		limit: Int,
+		nextToken: String
+	): ModelActionListConnection
+	actionListsByKnowledgeBaseID(
+		knowledgeBaseID: ID!,
+		filter: ModelActionListFilterInput,
+		sortDirection: ModelSortDirection,
+		limit: Int,
+		nextToken: String
+	): ModelActionListConnection
+	listActionLists(filter: ModelActionListFilterInput, limit: Int, nextToken: String): ModelActionListConnection
+	syncActionLists(
+		filter: ModelActionListFilterInput,
+		lastSync: AWSTimestamp,
+		limit: Int,
+		nextToken: String
+	): ModelActionListConnection
+	# Bookmarks
+	getActionListBookmark(id: ID!): ActionListBookmark
+	listActionListBookmarks(filter: TableActionListBookmarkFilterInput, limit: Int, nextToken: String): ActionListBookmarkConnection
+	# Advanced List Query
+	listActions(input: ListActionsInput): ListActionsResponse!
+}
+
+type Subscription {
+	onCreateAction(filter: ModelSubscriptionActionFilterInput): Action
+		@aws_subscribe(mutations: ["createAction"])
+	onUpdateAction(filter: ModelSubscriptionActionFilterInput): Action
+		@aws_subscribe(mutations: ["updateAction"])
+	onDeleteAction(filter: ModelSubscriptionActionFilterInput): Action
+		@aws_subscribe(mutations: ["deleteAction"])
+	onCreateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+		@aws_subscribe(mutations: ["createActionList"])
+	onUpdateActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+		@aws_subscribe(mutations: ["updateActionList"])
+	onDeleteActionList(filter: ModelSubscriptionActionListFilterInput): ActionList
+		@aws_subscribe(mutations: ["deleteActionList"])
+}
+
+schema {
+	query: Query
+	mutation: Mutation
+	subscription: Subscription
+}
